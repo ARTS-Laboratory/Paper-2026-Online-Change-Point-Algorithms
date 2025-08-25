@@ -4,8 +4,9 @@ Created on Thu Dec 21 12:24:29 2023
 
 @author: localuser
 """
-import _change_point_algorithms
+# import _change_point_algorithms
 
+from change_point_algorithms import _change_point_algorithms
 
 def cusum(
         time, data, mean, sigma, alpha, beta, shock_intervals=None,

@@ -4,6 +4,8 @@ build-backend = "maturin"
 
 [tool.maturin]
 features = ["pyo3/extension-module"]
+python-source = "src"
+module-name = "change_point_algorithms._change_point_algorithms"
 
 [tool.pytest.ini_options]
 addopts = [

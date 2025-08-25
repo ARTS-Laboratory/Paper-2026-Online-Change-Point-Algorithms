@@ -5,10 +5,12 @@ from collections import deque
 import numpy as np
 from numba import njit, vectorize
 
-try:
-    import _change_point_algorithms
-except ModuleNotFoundError:
-    warnings.warn('Rust module not included in environment.')
+from change_point_algorithms import _change_point_algorithms
+
+# try:
+#     import _change_point_algorithms
+# except ModuleNotFoundError:
+#     warnings.warn('Rust module not included in environment.')
 from change_point_algorithms.online_detection.model_helpers import (
     detection_to_intervals_for_generator_v1,
     detection_to_intervals_for_generator_v1_with_progress)
