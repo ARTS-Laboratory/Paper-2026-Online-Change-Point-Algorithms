@@ -4,8 +4,13 @@
 # if hasattr(change_point_algorithms, "__all__"):
 #     __all__ = change_point_algorithms.__all__
 
-from .online_detection import *
+# from .online_detection import *
+#
+# __doc__ = online_detection.__doc__
+# if hasattr(online_detection, "__all__"):
+#     __all__ = online_detection.__all__
 
-__doc__ = online_detection.__doc__
-if hasattr(online_detection, "__all__"):
-    __all__ = online_detection.__all__
+from change_point_algorithms import _change_point_algorithms
+__doc__ = _change_point_algorithms.__doc__
+if hasattr(_change_point_algorithms, "__all__"):
+    __all__ = _change_point_algorithms.__all__
