@@ -24,18 +24,19 @@ dynamic = ["version"]
 readme = "README.md"
 
 dependencies = [
-#    "kaleido", # need it for saving plots from plotly
-#    "matplotlib", # plotting library
+    "kaleido", # need it for saving plots from plotly
+    "matplotlib", # plotting library
     "maturin",
-#    "more_itertools",
     "numba", # speeding up some python functions
     "numpy",
-#    "pandas", # table representation
-#    "plotly", # plotting library
-#    "scikit-learn",
+    "pandas", # table representation
+    "plotly", # plotting library
+    "scikit-learn",
     "scipy",
-#    "ruptures", # offline change point detection
-    "tomlkit"
+    "ruptures", # offline change point detection
+    "tomlkit",
+    "typer>=0.17.4",
+    "polars>=1.33.1",
 ]
 
 [project.optional-dependencies]
