@@ -4,10 +4,13 @@ Created on Thu Dec 21 12:24:29 2023
 
 @author: localuser
 """
-# import _change_point_algorithms
+from collections import deque
 from enum import Enum
 
 from change_point_algorithms import _change_point_algorithms
+from change_point_algorithms.online_detection.model_helpers import (
+    detection_to_intervals_for_generator_v1_with_progress, detection_to_intervals_for_generator_v1)
+
 
 class CusumAlgVersion(Enum):
     ALG_V0 = 'v0'
@@ -94,7 +97,9 @@ def cusum_alg(
         time, data, mean, std_dev, h, alpha, shock_intervals=None,
         non_shock_intervals=None):
     """ """
-    raise NotImplementedError()
+    model_gen = cusum_alg_generator(data, mean, std_dev, h, alpha)
+    out = [item for item in model_gen]
+    return out
 
 
 def cusum_alg_generator(data, mean, std_dev, h, alpha):
@@ -118,7 +123,32 @@ def cusum_alg_generator(data, mean, std_dev, h, alpha):
             cp[idx], cn[idx] = 0, 0
         yield attack_likely
 
-def cusum_alg_v0_rust_hybrid(data, mean, std_dev, h, alpha):
+def cusum_alg_v0_generator_v1(data, mean, std_dev, h, alpha):
+    """ """
+    # cp, cn, d, mu = [0], [0], [0], [data[0]]
+    cp = deque([0], maxlen=2)
+    cn = deque([0], maxlen=2)
+    mu = deque([data[0]], maxlen=2)
+    # First point is always True
+    yield True
+    h_val = h * std_dev
+    variance = std_dev**2
+    d = 0
+    scalar, weight_no_diff = 1 + alpha * 0.5, alpha / variance
+    for idx, event in enumerate(data[1:], start=1):
+        weight = d * weight_no_diff
+        cp.append(max(0, cp[-1] + weight * (event - d * scalar)))
+        cn.append(min(0, cn[-1] - weight * (event + d * scalar)))
+        d = mu[-1] - mean  # mean_p
+        mu.append((1 - alpha) * mu[-1] + alpha * event)
+        # check if likely
+        attack_likely = (cp[-1] > h_val or cn[-1] < -h_val)
+        if attack_likely:
+            cp[-1], cn[-1] = 0, 0
+        yield attack_likely
+
+
+def cusum_alg_v0_rust_hybrid(data, mean: float, std_dev: float, h: float, alpha: float):
     """ """
     prob_threshold = h * std_dev
     model = _change_point_algorithms.CusumV0(mean, std_dev**2, alpha, h)
@@ -138,7 +168,7 @@ def cusum_alg_v1(
 
 def cusum_alg_v1_generator(data, mean, std_dev, h, alpha):
     """ """
-    cp, cn, d, mu = [0], [0], [0], [data[0]]
+    cp, cn, mu = [0], [0], [data[0]]
     # First point is always True
     yield True
     h_val = h * std_dev
