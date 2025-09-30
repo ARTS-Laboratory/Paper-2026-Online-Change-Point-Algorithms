@@ -197,7 +197,29 @@ def cusum_alg_v1_rust_hybrid(data, mean, std_dev, h, alpha):
         is_attack = probability >= prob_threshold
         yield is_attack
 
-def get_cusum_from_generator(time, data, mean, std_dev, h, alpha):
-    """ """
-    pass
-
+def get_cusum_from_generator(time, data, mean, std_dev, h, alpha, version=None, with_progress=False):
+    """ Return output of cusum algorithm using generator."""
+    begin = 0
+    default_alg = CusumAlgVersion.ALG_V0
+    if version is None:
+        alg_version = default_alg
+    else:
+        try:
+            alg_version = CusumAlgVersion(version)
+        except ValueError:
+            print(f'Algorithm version {version} not a valid option for cusum. Defaulting to {default_alg}')
+            alg_version = default_alg
+    match alg_version:
+        case CusumAlgVersion.ALG_V0:
+            model_gen = cusum_alg_generator(data, mean, std_dev, h, alpha)
+        case CusumAlgVersion.ALG_V1:
+            model_gen = cusum_alg_v1_generator(data, mean, std_dev, h, alpha)
+        case _:
+            raise ValueError(f'Invalid cusum algorithm version: {version}')
+    if with_progress:
+        shocks, non_shocks = detection_to_intervals_for_generator_v1_with_progress(
+            time, begin, model_gen, len(data))
+    else:
+        shocks, non_shocks = detection_to_intervals_for_generator_v1(
+            time, begin, model_gen)
+    return shocks, non_shocks
