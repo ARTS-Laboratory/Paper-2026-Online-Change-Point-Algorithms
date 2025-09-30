@@ -1,11 +1,11 @@
-use change_point_algorithms::bocpd::bocpd;
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use _change_point_algorithms::bocpd::bocpd;
+use criterion::{criterion_group, criterion_main, Criterion};
 use rand;
 use rand::distr::Distribution;
 use rand_distr::StandardNormal;
 
 pub fn bocpd_benchmark(c: &mut Criterion) {
-    let data_size = 100_000;
+    let data_size = 400_000;
     let mu = 0.0;
     let kappa = 1.0;
     let alpha = 0.5;
@@ -16,7 +16,7 @@ pub fn bocpd_benchmark(c: &mut Criterion) {
     c.bench_function("bocpd naive vec", |b| {
         b.iter(|| {
             bocpd(
-                black_box(unknown_data.iter()),
+                std::hint::black_box(unknown_data.iter()),
                 mu,
                 kappa,
                 alpha,
