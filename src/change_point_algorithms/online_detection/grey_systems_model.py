@@ -105,7 +105,6 @@ def mean_sequence(window, alpha=0.5):
 def mean_sequence_inplace(window, out, alpha=0.5):
     """ Return the running average over a window."""
     out[0] = window[0]
-    val = window[0]
     neg_alpha = 1 - alpha
     for idx in range(1, len(window)):
         out[idx] = (window[idx - 1] * alpha) + (window[idx] * neg_alpha)
