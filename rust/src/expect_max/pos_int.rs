@@ -70,18 +70,15 @@ impl PositiveInteger2 {
     }
 
     pub fn set(&mut self, value: u32) -> Result<u32, PositiveError> {
-        NonZero::new(value)
-            .and_then(|x| {
-                self.0 = x;
-                Some(value)
-            })
-            .ok_or(PositiveError(value))
-        // match NonZero::new(value) {
-        //     Some(x) => {
+        NonZero::new(value).map(|x| {
+            self.0 = x;
+            value
+        }).ok_or(PositiveError(value))
+        // NonZero::new(value)
+        //     .and_then(|x| {
         //         self.0 = x;
-        //         Ok(self)
-        //     },
-        //     None => Err(PositiveError(value))
-        // }
+        //         Some(value)
+        //     })
+        //     .ok_or(PositiveError(value))
     }
 }
