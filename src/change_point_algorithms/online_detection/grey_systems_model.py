@@ -1,4 +1,5 @@
 import math
+from collections.abc import Iterator
 
 import numpy as np
 
@@ -9,7 +10,7 @@ from change_point_algorithms.online_detection.model_helpers import (
     detection_to_intervals_for_generator_v1_with_progress)
 
 
-def grey_model_generator(data, window_size=1, c=3, c_ratio=300):
+def grey_model_generator(data, window_size=1, c=3, c_ratio=300) -> Iterator[bool]:
     """ Return Grey Model results for given data.
 
         :param np.ndarray data: Array of data. Data expected to be non-negative.
@@ -50,7 +51,7 @@ def grey_model_generator(data, window_size=1, c=3, c_ratio=300):
         yield attack_likely
 
 
-def grey_model_generator_2(data, window_size, w_factor, threshold):
+def grey_model_generator_2(data, window_size, w_factor, threshold) -> Iterator[bool]:
     alp = 0.5  ##whitenization amount
     ws = 3  ##window size-compate vectors of 4 values (so similar to EM)
     threshold = 0.15 # 0.05  ## related to sensitivity-threshold
