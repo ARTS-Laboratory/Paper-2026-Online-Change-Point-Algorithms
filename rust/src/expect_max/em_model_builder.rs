@@ -272,6 +272,12 @@ impl EmBuilderOne<f64> {
     }
 }
 
+impl Default for EmBuilderOne<f64> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<T: Clone + num_traits::identities::Zero + Send + Sync> EmBuilderTwo<T> {
     pub fn build_likelihoods(&mut self) -> &mut Self {
         let sample_size = self.sample_arr.len();
