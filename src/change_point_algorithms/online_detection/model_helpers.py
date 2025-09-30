@@ -5,7 +5,7 @@ try:
 except ModuleNotFoundError:
     warnings.warn('tqdm module not included in environment.')
 except ImportError:
-    warnings.warn('Expected Cython imports to be available.')
+    warnings.warn('Expected tqdm to be installed, but cannot find it.')
     tqdm = None
 
 
