@@ -1,7 +1,6 @@
 import math
-from typing import List, Iterable
+from typing import Iterable
 
-# import _change_point_algorithms
 import numpy as np
 from numba import njit
 
@@ -48,10 +47,6 @@ def expectation_maximization_generator(
             # Expectation
             posterior_probs_v2_inplace(
                 data, pi_hat, mu2_hat, sig2_hat, mu1_hat, sig1_hat, out)
-            # attack_prob, inverse = posterior_probs_v2(
-            #     data, pi_hat, mu2_hat, sig2_hat, mu1_hat, sig1_hat)
-            # attack_prob, inverse = posterior_probs_v3(
-            #     data, pi_hat, mu2_hat, sig2_hat, mu1_hat, sig1_hat)
             # Maximization
             mu1_hat, mu2_hat, sig1_hat, sig2_hat, pi_hat = maximization(
                 data, attack_prob, inverse, mu1_hat, mu2_hat,
@@ -73,7 +68,7 @@ def close_enough(a, b):
 def maximization(
         data, attack_prob, inverse, mu1_hat, mu2_hat, sig1_hat, sig2_hat,
         pi_hat, size):
-    """
+    """ Return updated parameter values for two normal distributions.
     """
     density, inverse_density = attack_prob.sum(), inverse.sum()
     # If all probabilities are zero for attack or not attack, no need to update
@@ -135,7 +130,6 @@ def posterior_prob(point, attack_prob, attack_mean, attack_var, normal_mean, nor
     num = attack_prob * phi_single(point, attack_mean, attack_var)
     denom = num + (1 - attack_prob) * phi_single(point, normal_mean, normal_var)
     if denom == 0.0:
-        # print(f'There exists a zero here: {num}')
         return num
     return num / denom
 
@@ -178,28 +172,18 @@ def posterior_probs_v2_inplace(points, attack_prob, attack_mean, attack_var, nor
 
 
 @njit
-def update_means(probs, inverse, density, inverse_density, events):
+def update_means(probs: np.typing.ArrayLike, inverse: np.typing.ArrayLike, density: float, inverse_density: float, events: np.typing.ArrayLike | list[float]) -> (float, float):
     """ Return updated values for means.
 
         :param probs: List of probabilities of attack.
-        :type probs: List[float] or np.ndarray
         :param inverse: List of probabilities of safe.
-        :type inverse: List[float] or np.ndarray
         :param float density: Probability density for mean 1.
         :param float inverse_density: Probability density for mean 1.
         :param events: List of events corresponding to probs.
-        :rtype: (float, float)
         :returns: tuple of updated means (mean 1, mean 2)"""
     mean_1 = np.dot(inverse, events) / inverse_density
     mean_2 = np.dot(probs, events) / density
     return mean_1, mean_2
-    # mean_1_denom = inverse_density
-    # mean_2_denom = density
-    # mean_1_num = np.dot(inverse, events)
-    # mean_2_num = np.dot(probs, events)
-    # mean_1 = mean_1_num / mean_1_denom
-    # mean_2 = mean_2_num / mean_2_denom
-    # return mean_1, mean_2
 
 
 @njit
@@ -244,8 +228,8 @@ def update_attack_prob(density: float, size: int) -> float:
 
 def em_rust_hybrid(data, safe_mean: float, safe_stddev: float, num_safe: int, unsafe_mean: float, unsafe_stddev: float, num_unsafe: int,
                    # , mean_1, mean_2, var_1, var_2,
-                   pi, epochs=1, prob_threshold=0.05, early_stopping=False):
-    """ """
+                   pi: float, epochs=1, prob_threshold=0.05, early_stopping=False):
+    """ Return decision of each observation in data as normal or abnormal using Expectation Maximization algorithm."""
     prob_threshold_normal = 1.0 - prob_threshold
     if early_stopping:
         early_stop_threshold = 1e-5
@@ -264,7 +248,7 @@ def em_rust_hybrid(data, safe_mean: float, safe_stddev: float, num_safe: int, un
     else:
         model = _change_point_algorithms.build_em_model(
             (safe_mean, safe_stddev, pi), [(unsafe_mean, unsafe_stddev, 1 - pi)],
-            [num_safe, num_unsafe], epochs=epochs,)
+            [num_safe, num_unsafe], epochs=epochs)
         update_model = model.update
         predict_model = model.predict
         for idx, event in enumerate(data):
@@ -282,7 +266,6 @@ def get_em_from_generator(
     """ Run expectation maximization algorithm and return detection regions."""
     # Instantiating variables
     begin = 0
-    shock = False
     # get params theta = mu , mu2, sig, sig2, pi
     mean_1_p = mean_1 if mean_1 is not None else np.mean(normal_obs)
     mean_2_p = mean_2 if mean_2 is not None else np.mean(abnormal_obs)
@@ -298,6 +281,24 @@ def get_em_from_generator(
     em_model_gen = expectation_maximization_generator(
         my_normal_obs, my_abnormal_obs, my_unknowns, mean_1_p, mean_2_p,
         var_1_p, var_2_p, pi_p, epochs)
+    if with_progress:
+        shocks, non_shocks = detection_to_intervals_for_generator_v1_with_progress(
+            time, begin, em_model_gen, len(unknowns))
+    else:
+        shocks, non_shocks = detection_to_intervals_for_generator_v1(
+        time, begin, em_model_gen)
+    return shocks, non_shocks
+
+def get_em_model_from_generator(
+        time, normal_size, abnormal_size, unknowns, mean_1, mean_2,
+        var_1, var_2, pi, epochs=1, with_progress=False):
+    begin = 0
+    # sizes = [normal_size, abnormal_size]
+    # em_model_gen = em_rust_hybrid(
+    #     unknowns, mean_1, var_1, mean_2, var_2, pi, sizes, epochs)
+    em_model_gen = em_rust_hybrid(
+        unknowns, mean_1, math.sqrt(var_1), normal_size, mean_2, math.sqrt(var_2),
+        abnormal_size, pi, epochs)
     if with_progress:
         shocks, non_shocks = detection_to_intervals_for_generator_v1_with_progress(
             time, begin, em_model_gen, len(unknowns))
