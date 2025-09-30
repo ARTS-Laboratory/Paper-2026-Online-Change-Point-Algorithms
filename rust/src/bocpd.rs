@@ -102,36 +102,36 @@ pub fn bocpd<T: element::Element>(
     out
 }
 
-fn calculate_probabilities(
-    point: f64,
-    lamb: f64,
-    parameters: &VecDeque<NormalInverseGamma>,
-    run_lengths: &mut VecDeque<i64>,
-    probabilities: &mut VecDeque<f64>,
-) {
-    let priors = calculate_priors(point, parameters);
-    let mut head = 0.0;
-    let hazard = hazard_function(lamb);
-    let negative_hazard = 1.0 - hazard;
-    for (probability, prior) in zip(probabilities.iter_mut(), priors) {
-        let val = *probability * prior;
-        head += val;
-        *probability = val * negative_hazard;
-    }
-    head *= hazard;
-    probabilities.push_front(head);
-    // normalize if not 0
-    let prob_sum: f64 = probabilities.iter().sum();
-    if prob_sum != 0.0 {
-        for probability in probabilities.iter_mut() {
-            *probability /= prob_sum;
-        }
-    }
-    for run_length in run_lengths.iter_mut() {
-        *run_length += 1;
-    }
-    run_lengths.push_front(0);
-}
+// fn calculate_probabilities(
+//     point: f64,
+//     lamb: f64,
+//     parameters: &VecDeque<NormalInverseGamma>,
+//     run_lengths: &mut VecDeque<i64>,
+//     probabilities: &mut VecDeque<f64>,
+// ) {
+//     let priors = calculate_priors(point, parameters);
+//     let mut head = 0.0;
+//     let hazard = hazard_function(lamb);
+//     let negative_hazard = 1.0 - hazard;
+//     for (probability, prior) in zip(probabilities.iter_mut(), priors) {
+//         let val = *probability * prior;
+//         head += val;
+//         *probability = val * negative_hazard;
+//     }
+//     head *= hazard;
+//     probabilities.push_front(head);
+//     // normalize if not 0
+//     let prob_sum: f64 = probabilities.iter().sum();
+//     if prob_sum != 0.0 {
+//         for probability in probabilities.iter_mut() {
+//             *probability /= prob_sum;
+//         }
+//     }
+//     for run_length in run_lengths.iter_mut() {
+//         *run_length += 1;
+//     }
+//     run_lengths.push_front(0);
+// }
 
 fn calculate_probabilities_2(
     point: f64,
