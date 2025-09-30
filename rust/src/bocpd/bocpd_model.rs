@@ -8,6 +8,7 @@ use std::iter::zip;
 const DEFAULT_THRESHOLD: f64 = 1e-8;
 const BETA_FIXED: f64 = 0.5;
 
+/// A class implementing Bayesian Online Change Point Detection.
 #[pyclass]
 pub struct BocpdModel {
     initial_params: NormalInverseGamma,
@@ -57,6 +58,7 @@ impl BocpdModel {
         })
     }
 
+    /// Calculate and return likelihood estimates for each distribution in params.
     fn get_priors(&mut self, point: f64) -> Vec<f64> {
         match &mut self.beta_cache {
             Some(x) => self.params.priors_cached(point, x),
@@ -64,15 +66,16 @@ impl BocpdModel {
         }
     }
 
-    // update model parameters using given input value
+    /// Update model parameters using given input value.
     pub fn update(&mut self, point: f64, lamb: f64) -> PyResult<()> {
         self.calculate_probabilities(point, lamb)?;
         self.truncate_vectors();
+        // self.probs.normalize();
         self.update_params(point);
         Ok(())
     }
 
-    // give probability of seeing input value
+    /// give probability of seeing input value
     pub fn predict(&mut self, point: f64) -> f64 {
         let priors = self.get_priors(point);
         // dot product
@@ -103,6 +106,7 @@ impl BocpdModel {
         self.params.len()
     }
 
+    /// Update parameters based on new observation.
     fn update_params(&mut self, point: f64) {
         let (max_idx, _max_val) = self.probs.max_prob();
         self.prev_max = self.curr_max;
