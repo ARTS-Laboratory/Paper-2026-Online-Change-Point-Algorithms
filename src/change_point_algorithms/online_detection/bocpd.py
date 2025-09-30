@@ -1,22 +1,17 @@
 import math
-import warnings
 from collections import deque
+from collections.abc import Iterable
 
 import numpy as np
 from numba import njit, vectorize
-
 from change_point_algorithms import _change_point_algorithms
 
-# try:
-#     import _change_point_algorithms
-# except ModuleNotFoundError:
-#     warnings.warn('Rust module not included in environment.')
 from change_point_algorithms.online_detection.model_helpers import (
     detection_to_intervals_for_generator_v1,
     detection_to_intervals_for_generator_v1_with_progress)
 
 
-def bocpd_generator(data, mu, kappa, alpha, beta, lamb):
+def bocpd_generator(data: np.typing.ArrayLike | Iterable[float], mu: float, kappa: float, alpha: float, beta: float, lamb: float):
     """ Generator for Bayesian Online Change Point Detection Algorithm."""
     my_data: np.ndarray = np.asarray(data)
     maxes = deque((0,), maxlen=2)
@@ -48,7 +43,7 @@ def bocpd_generator(data, mu, kappa, alpha, beta, lamb):
 def bocpd_rust_hybrid(
         data: np.typing.ArrayLike, mu: float, kappa: float, alpha: float,
         beta: float, lamb: float, threshold=1e-8, with_cache=True):
-    """ """
+    """ Generator for Bayesian Online Change Point Detection Algorithm using Rust class."""
     prob_threshold = 0.05
     my_data = np.asarray(data)
     model = _change_point_algorithms.BocpdModel(alpha, beta, mu, kappa, with_cache, threshold)
