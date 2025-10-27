@@ -1,4 +1,5 @@
 import itertools
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 
 import polars as pl
@@ -6,7 +7,9 @@ import polars as pl
 from pathlib import Path
 
 import Hyperparameters
+from AnomalyAlgorithm import AnomalyType, AnomalyAlgorithm
 from DetectionAlgorithm import DetectionAlgorithm, ModelType, DetectionAlgorithmV2
+from model_runners.offline_anomaly_models import run_offline_anomaly_models_v2
 from model_runners.online_models import run_online_models, ResultType, run_online_models_v2
 from utils.detection_arr_helpers import convert_interval_indices_to_full_arr, intervals_to_dense_arr
 from utils.path_validation import confirm_dir_or_consult, check_dir_exists
@@ -132,7 +135,40 @@ def get_models_from_config(models_config: list[dict]) -> dict[str, DetectionAlgo
         algs[name] = alg
     return algs
 
+def get_anomaly_model_hyperparameters(model_type: AnomalyType, hp: Mapping) -> dataclass:
+    """ Get hyperparameters from config.
 
+        :param model_type: Model type.
+        :param hp: Hyperparameter section of config for model.
+    """
+    match model_type:
+        case AnomalyType.SVM | AnomalyType.ISO_FOREST:
+            safe_vals = hp['safe']
+            unsafe_vals = hp['unsafe']
+            safe = [Hyperparameters.NormalDistParams(
+                Hyperparameters.Normal(
+                    item['mean'].unwrap(), item['std_dev'].unwrap()),
+                item['num'].unwrap()) for item in safe_vals]
+            unsafe = [Hyperparameters.NormalDistParams(
+                Hyperparameters.Normal(
+                    item['mean'].unwrap(), item['std_dev'].unwrap()),
+                item['num'].unwrap()) for item
+                    in unsafe_vals]
+            return Hyperparameters.SafeUnsafeNormalMixtureHyperparams(safe, unsafe)
+
+def get_anomaly_models_from_config(model_config: Iterable[dict]) -> dict:
+    """ """
+    algs = dict()
+    for model in model_config:
+        try:
+            model_type = AnomalyType(model['type'])
+        except KeyError:
+            raise ValueError(f"Invalid anomaly model type: {model['type']}")
+        name = model['name']
+        hyperparameters = get_anomaly_model_hyperparameters(model_type, model['hyperparameters'])
+        alg = AnomalyAlgorithm(model_type, name, hyperparameters)
+        algs[name] = alg
+    return algs
 
 def parse_run_online(config_file):
     # set_rc_params()
@@ -169,9 +205,21 @@ def parse_run_online(config_file):
             names = run_config['model_names']
             chosen_algs = (algs[name] for name in names)
         results = run_online_models_v2(time, data, chosen_algs, with_progress=show_progress)
+        # Choose anomaly algorithms to run if enabled
+        anomaly_algs = get_anomaly_models_from_config(config_table['anomaly-models'])
+        # Choose algorithms to run
+        if run_config['run_all']:
+            chosen_algs = anomaly_algs.values()
+        else:
+            names = run_config['anomaly-model-names']
+            chosen_algs = (anomaly_algs[name] for name in names)
+        anomaly_results = run_offline_anomaly_models_v2(time, data, chosen_algs, with_progress=show_progress)
         # convert to dataframe of time, model_name, prediction
         df = online_model_results_to_polars(time, results)
         print(df)
+        anomaly_df = online_model_results_to_polars(time, anomaly_results)
+        print(anomaly_df)
+        res_df = pl.concat([df, anomaly_df])
         # Saving results
         saves_config = config_table['saves'] # overall saving information
         run_save_config = run_config['saving'] # run specific saving information
@@ -184,7 +232,7 @@ def parse_run_online(config_file):
             if run_save_config['save-as'] == 'csv':
                 confirm_dir_or_consult(save_dir)
                 save_path = Path(save_dir, run_save_config['save-name'])
-                df.write_csv(save_path.with_suffix('.csv'))
+                res_df.write_csv(save_path.with_suffix('.csv'))
             else:
                 raise NotImplementedError(f"No implementation for saving {run_save_config['save-as']}")
 

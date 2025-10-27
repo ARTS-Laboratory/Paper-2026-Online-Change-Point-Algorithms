@@ -44,3 +44,18 @@ class NonparametricHyperparams:
     window_size: int
     critical_value: float
     alpha: float
+
+@dataclass
+class Normal:
+    mean: float
+    std_dev: float
+
+@dataclass
+class NormalDistParams:
+    dist: Normal
+    num_samples: int
+
+@dataclass
+class SafeUnsafeNormalMixtureHyperparams:
+    safe: list[NormalDistParams]
+    unsafe: list[NormalDistParams]

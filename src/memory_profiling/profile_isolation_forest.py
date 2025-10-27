@@ -3,7 +3,8 @@ import tracemalloc
 import numpy as np
 
 from memory_profiling.profiling import get_scalar_unit
-from model_runners.offline_anomaly_models import run_offline_anomaly_models, AnomalyType
+from model_runners.offline_anomaly_models import run_offline_anomaly_models
+from AnomalyAlgorithm import AnomalyType
 
 
 def get_benchmark_vars():
