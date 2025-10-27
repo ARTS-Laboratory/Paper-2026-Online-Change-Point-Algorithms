@@ -333,7 +333,7 @@ def plot_detection_online_models(time: np.ndarray, data: np.ndarray, results: Re
     to_ms = True
     for (model, shocks, non_shocks) in results:
         detection_fig = plot_shock(time, data, shocks, non_shocks, to_ms=to_ms)
-        plt.savefig(Path(model.save_path).with_suffix('.png'),dpi=dpi)
+        plt.savefig(Path(model.save_path).with_suffix('.png'), dpi=dpi)
         plt.close(detection_fig)
 
 # def plot_detection_online_models_v2(time: np.ndarray, data: np.ndarray, df: pl.DataFrame, model_names=None):
