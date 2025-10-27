@@ -105,8 +105,8 @@ def cusum_alg(
 def cusum_alg_generator(data, mean, std_dev, h, alpha):
     """ """
     cp, cn, d, mu = [0], [0], [0], [data[0]]
-    # First point is always True
-    yield True
+    # # First point is always True
+    # yield True
     h_val = h * std_dev
     variance = std_dev**2
     d = 0
@@ -129,8 +129,8 @@ def cusum_alg_v0_generator_v1(data, mean, std_dev, h, alpha):
     cp = deque([0], maxlen=2)
     cn = deque([0], maxlen=2)
     mu = deque([data[0]], maxlen=2)
-    # First point is always True
-    yield True
+    # # First point is always True
+    # yield True
     h_val = h * std_dev
     variance = std_dev**2
     d = 0
@@ -169,8 +169,8 @@ def cusum_alg_v1(
 def cusum_alg_v1_generator(data, mean, std_dev, h, alpha):
     """ """
     cp, cn, mu = [0], [0], [data[0]]
-    # First point is always True
-    yield True
+    # # First point is always True
+    # yield True
     h_val = h * std_dev
     variance = std_dev ** 2
     for idx, event in enumerate(data[1:], start=1):
