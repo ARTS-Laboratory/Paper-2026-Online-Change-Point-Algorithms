@@ -11,7 +11,7 @@ from AnomalyAlgorithm import AnomalyType, AnomalyAlgorithm
 from DetectionAlgorithm import DetectionAlgorithm, ModelType, DetectionAlgorithmV2
 from model_runners.offline_anomaly_models import run_offline_anomaly_models_v2
 from model_runners.online_models import run_online_models, ResultType, run_online_models_v2
-from utils.detection_arr_helpers import convert_interval_indices_to_full_arr, intervals_to_dense_arr
+from utils.detection_arr_helpers import intervals_to_dense_arr
 from utils.path_validation import confirm_dir_or_consult, check_dir_exists
 from utils.read_data import load_signals
 from utils.toml_utils import load_toml
@@ -81,7 +81,7 @@ def read_model_config(config_file):
         algs.append(alg)
     return algs
 
-def get_model_hyperparameters(model_type: ModelType, hp) -> dataclass:
+def get_model_hyperparameters(model_type: ModelType, hp: Mapping) -> dataclass:
     """ Get hyperparameters from config.
 
         :param model_type: Model type.
@@ -121,7 +121,7 @@ def get_model_hyperparameters(model_type: ModelType, hp) -> dataclass:
                 alpha=hp['alpha'].unwrap()
                 )
 
-def get_models_from_config(models_config: list[dict]) -> dict[str, DetectionAlgorithmV2]:
+def get_models_from_config(models_config: Iterable[dict]) -> dict[str, DetectionAlgorithmV2]:
     """ Create dictionary of detection algorithms from config file."""
     algs = dict()
     for model in models_config:
