@@ -1,7 +1,8 @@
 import numpy as np
 
 from benchmarks.benchmark_helpers import benchmark_generator
-from model_runners.offline_anomaly_models import run_offline_anomaly_models, AnomalyType
+from model_runners.offline_anomaly_models import run_offline_anomaly_models
+from AnomalyAlgorithm import AnomalyType
 
 
 def get_benchmark_vars():
