@@ -246,7 +246,7 @@ def online_model_results_to_polars(time, results: list[ResultType]):
         predictions = intervals_to_dense_arr(time, shock_region, non_shock_region)
         change_point_times = set((start for start, end in itertools.chain(shock_region, non_shock_region)))
         # change_points = [point in change_point_times for point in time]
-        tuples = [(name, time_point, prediction, time_point in change_point_times) for time_point, prediction in zip(time, predictions)]
+        tuples = ((name, time_point, prediction, time_point in change_point_times) for time_point, prediction in zip(time, predictions))
         # tuples = [(name, time_point, prediction) for time_point, prediction in zip(time, predictions)]
         tuple_list.extend(tuples)
     df = pl.DataFrame(tuple_list, ['name', 'time', 'prediction', 'is_change_point'], orient='row')
