@@ -221,20 +221,30 @@ def parse_run_online(config_file):
         print(anomaly_df)
         res_df = pl.concat([df, anomaly_df])
         # Saving results
-        saves_config = config_table['saves'] # overall saving information
-        run_save_config = run_config['saving'] # run specific saving information
-        if run_save_config['save']:
-            folder = run_save_config.get('where', '')
-            if run_save_config['is-subdir']:
-                save_dir = Path(saves_config['save-root'], folder)
-            else:
-                save_dir = Path(folder)
-            if run_save_config['save-as'] == 'csv':
-                confirm_dir_or_consult(save_dir)
-                save_path = Path(save_dir, run_save_config['save-name'])
-                res_df.write_csv(save_path.with_suffix('.csv'))
-            else:
-                raise NotImplementedError(f"No implementation for saving {run_save_config['save-as']}")
+        saves_config = config_table['saves']  # overall saving information
+        run_save_config = run_config['saving']  # run specific saving information
+        parse_run_saving(saves_config, run_save_config, res_df)
+
+
+def parse_run_saving(saves_config, run_save_config, df: pl.DataFrame):
+    """ Parse 'saving' table of run config.
+
+        :param saves_config: Config table of overall saving information
+        :param run_save_config: Config table of saving information for run specifically.
+        :param df: DataFrame of data to save.
+    """
+    if run_save_config['save']:
+        folder = run_save_config.get('where', '')
+        if run_save_config['is-subdir']:
+            save_dir = Path(saves_config['save-root'], folder)
+        else:
+            save_dir = Path(folder)
+        if run_save_config['save-as'] == 'csv':
+            confirm_dir_or_consult(save_dir)
+            save_path = Path(save_dir, run_save_config['save-name'])
+            df.write_csv(save_path.with_suffix('.csv'))
+        else:
+            raise NotImplementedError(f"No implementation for saving {run_save_config['save-as']}")
 
 def online_model_results_to_polars(time: np.ndarray, results: Iterable[ResultType]):
     """ """
