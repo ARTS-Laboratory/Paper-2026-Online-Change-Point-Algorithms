@@ -1,10 +1,11 @@
 import itertools
+import os
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
-
-import polars as pl
-
 from pathlib import Path
+
+import numpy as np
+import polars as pl
 
 import Hyperparameters
 from AnomalyAlgorithm import AnomalyType, AnomalyAlgorithm
@@ -12,13 +13,12 @@ from DetectionAlgorithm import DetectionAlgorithm, ModelType, DetectionAlgorithm
 from model_runners.offline_anomaly_models import run_offline_anomaly_models_v2
 from model_runners.online_models import run_online_models, ResultType, run_online_models_v2
 from utils.detection_arr_helpers import intervals_to_dense_arr
-from utils.path_validation import confirm_dir_or_consult, check_dir_exists
+from utils.path_validation import confirm_dir_or_consult
 from utils.read_data import load_signals
 from utils.toml_utils import load_toml
 
 
-
-def read_model_config(config_file):
+def read_model_config(config_file: os.PathLike):
     """ Parse config file for models."""
     config_table = load_toml(config_file)
     default_save_path = Path(config_table['save-root'])
@@ -81,7 +81,7 @@ def read_model_config(config_file):
         algs.append(alg)
     return algs
 
-def get_model_hyperparameters(model_type: ModelType, hp: Mapping) -> dataclass:
+def get_model_hyperparameters(model_type: ModelType, hp: Mapping) -> object:
     """ Get hyperparameters from config.
 
         :param model_type: Model type.
@@ -236,7 +236,7 @@ def parse_run_online(config_file):
             else:
                 raise NotImplementedError(f"No implementation for saving {run_save_config['save-as']}")
 
-def online_model_results_to_polars(time, results: list[ResultType]):
+def online_model_results_to_polars(time: np.ndarray, results: Iterable[ResultType]):
     """ """
     # arr_size = len(time)
     tuple_list = []
