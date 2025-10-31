@@ -91,12 +91,12 @@ def grey_model_generator_2(data, window_size: int, w_factor: float, threshold: f
         change_likely = (1 / (1 + threshold * sp)) < threshold or (1 / (1 + threshold * s)) < threshold
         yield change_likely
 
-@njit
-def accumulation_sequence(window: np.ndarray):
-    """ Return the accumulation over the window."""
-    output = window.cumsum()
-    output[-1] = window.sum()
-    return output
+# @njit
+# def accumulation_sequence(window: np.ndarray) -> np.ndarray:
+#     """ Return the accumulation over the window."""
+#     output = window.cumsum()
+#     output[-1] = window.sum()
+#     return output
 
 
 @njit
@@ -107,12 +107,12 @@ def accumulation_sequence_inplace(window: np.ndarray, out: np.ndarray):
     out[-1] = window.sum()
 
 
-@njit
-def mean_sequence(window, alpha=0.5):
-    """ Return the running average over a window."""
-    transformed = np.empty_like(window)
-    mean_sequence_inplace(window, transformed, alpha=alpha)
-    return transformed
+# @njit
+# def mean_sequence(window, alpha=0.5):
+#     """ Return the running average over a window."""
+#     transformed = np.empty_like(window)
+#     mean_sequence_inplace(window, transformed, alpha=alpha)
+#     return transformed
 
 
 @njit
