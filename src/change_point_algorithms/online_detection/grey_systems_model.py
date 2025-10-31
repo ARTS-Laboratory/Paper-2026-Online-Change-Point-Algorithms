@@ -20,6 +20,7 @@ def grey_model_generator(data, window_size=1, c=3, c_ratio=300, alpha=0.5) -> It
         :param alpha: Weighting factor for absolute and relative degree.
         :returns: Generator of boolean classification.
         :rtype: None"""
+    neg_alpha = 1.0 - alpha
     sample_arr = np.empty((3, window_size))
     window_1 = sample_arr[0]
     x_1 = sample_arr[1]
@@ -47,7 +48,8 @@ def grey_model_generator(data, window_size=1, c=3, c_ratio=300, alpha=0.5) -> It
         # degree_ratio = grey_incidence_degree_ratio(s_1_ratio, s_2_ratio, c=c_ratio)
         rel_degree = grey_incidence_degree(s_1_rel_dist, s_2_rel_dist, c=c_ratio)
         # attack_likely = degree <= 0.5 or degree_ratio <= 0.5
-        attack_likely = degree <= 0.5 or rel_degree <= 0.5
+        # attack_likely = degree <= 0.5 or rel_degree <= 0.5
+        attack_likely = alpha * degree + neg_alpha * rel_degree <= 0.5
         # attack_likely = min(degree, rel_degree) <= 0.5
         yield attack_likely
 
