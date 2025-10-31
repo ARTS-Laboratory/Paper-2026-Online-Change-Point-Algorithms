@@ -44,9 +44,11 @@ def grey_model_generator(data, window_size=1, c=3, c_ratio=300, alpha=0.5) -> It
         # s_2_ratio = behavioral_sequence_ratio(z_2)
         # s_2_ratio = behavioral_sequence_ratio_2(z_2)
         s_2_rel_dist = behavior_relative_difference(z_2)
-        degree = grey_incidence_degree(s_1, s_2, c=c)
+        # degree = grey_incidence_degree(s_1, s_2, c=c)
+        degree = similitude(s_1, s_2, c=c)
         # degree_ratio = grey_incidence_degree_ratio(s_1_ratio, s_2_ratio, c=c_ratio)
-        rel_degree = grey_incidence_degree(s_1_rel_dist, s_2_rel_dist, c=c_ratio)
+        # rel_degree = grey_incidence_degree(s_1_rel_dist, s_2_rel_dist, c=c_ratio)
+        rel_degree = similitude(s_1_rel_dist, s_2_rel_dist, c=c_ratio)
         # attack_likely = degree <= 0.5 or degree_ratio <= 0.5
         # attack_likely = degree <= 0.5 or rel_degree <= 0.5
         attack_likely = alpha * degree + neg_alpha * rel_degree <= 0.5
@@ -211,7 +213,8 @@ def grey_incidence_degree(val_1, val_2, c=3.0):
 
 
 # @njit
-def grey_incidence_degree_ratio(val_1, val_2, c=1.0):
+def similitude(val_1, val_2, c=1.0):
+    """ Return similitude of two values."""
     return 1.0 / (1.0 + c * abs(val_1 - val_2))
 
 
