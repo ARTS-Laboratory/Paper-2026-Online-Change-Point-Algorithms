@@ -102,7 +102,6 @@ def grey_model_generator_2(data, window_size: int, w_factor: float, threshold: f
 @njit
 def accumulation_sequence_inplace(window: np.ndarray, out: np.ndarray):
     """ Return the accumulation over the window."""
-    # return np.add.accumulate(window)
     out[:] = window.cumsum()
     out[-1] = window.sum()
 
