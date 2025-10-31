@@ -189,14 +189,14 @@ def behavior_log_difference(window) -> float:
         case _:
             raise NotImplementedError
     for item in window[1:]:
-        match (head, tail):
+        match (head, item):
             case (0, 0):
                 s_0 += 0.0
-            case (0, tail):
+            case (0, _):
                 s_0 += math.inf
             case (head, 0):
                 s_0 += -math.inf
-            case (head, tail):
+            case (head, item):
                 s_0 += math.log(item / head)
             case _:
                 raise NotImplementedError
