@@ -10,14 +10,15 @@ from change_point_algorithms.online_detection.model_helpers import (
     detection_to_intervals_for_generator_v1_with_progress)
 
 
-def grey_model_generator(data, window_size=1, c=3, c_ratio=300) -> Iterator[bool]:
+def grey_model_generator(data, window_size=1, c=3, c_ratio=300, alpha=0.5) -> Iterator[bool]:
     """ Return Grey Model results for given data.
 
         :param np.ndarray data: Array of data. Data expected to be non-negative.
         :param int window_size: Size of window to iterate over array.
         :param float c: Constant multiplier for degree of grey incidence.
         :param float c_ratio: Constant multiplier for degree of ratio grey incidence.
-        :returns:
+        :param alpha: Weighting factor for absolute and relative degree.
+        :returns: Generator of boolean classification.
         :rtype: None"""
     sample_arr = np.empty((3, window_size))
     window_1 = sample_arr[0]
@@ -160,7 +161,7 @@ def behavior_relative_difference(window) -> float:
     return s_0
 
 
-@njit
+# @njit
 def behavior_log_difference(window) -> float:
     """ """
     head = window[0]
@@ -230,8 +231,7 @@ def get_grey_from_generator(time, data, window_size=1, c=3, c_ratio=3, with_prog
     grey_version = 1
     match grey_version:
         case 1:
-            grey_model_gen = grey_model_generator(
-                my_data, window_size, c=c, c_ratio=c_ratio)
+            grey_model_gen = grey_model_generator(my_data, window_size, c=c, c_ratio=c_ratio)
         case 2:
             grey_model_gen = grey_model_generator_2(my_data)
         case _:

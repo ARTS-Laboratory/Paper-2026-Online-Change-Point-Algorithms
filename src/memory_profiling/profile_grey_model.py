@@ -23,6 +23,5 @@ def profile_grey_model_from_python():
     print(f'Current memory usage: {curr} B, peak of {peak} B')
     tracemalloc.reset_peak()
     print(tracemalloc.get_traced_memory())
-    model_gen = grey_model_generator(
-        data, window_size, c=c, c_ratio=c_ratio)
+    model_gen = grey_model_generator(data, window_size, c=c, c_ratio=c_ratio)
     profiling.profile_model_run(model_gen, mem_unit)
