@@ -52,11 +52,21 @@ def grey_model_generator(data, window_size=1, c=3, c_ratio=300, alpha=0.5) -> It
         yield attack_likely
 
 
-def grey_model_generator_2(data, window_size, w_factor, threshold) -> Iterator[bool]:
-    alp = 0.5  ##whitenization amount
-    ws = 3  ##window size-compate vectors of 4 values (so similar to EM)
-    threshold = 0.15 # 0.05  ## related to sensitivity-threshold
-    c = data[0]  ## constant to avoid 0 division in relative grey indices
+def grey_model_generator_2(data, window_size: int, w_factor: float, threshold: float, rel_grey_const=None) -> Iterator[bool]:
+    """ Return Grey Model results for given data.
+
+        :param data: Array of data. Data expected to be non-negative.
+        :param window_size: Size of window to iterate over array.
+        :param w_factor: Whitenization amount.
+        :param threshold: Related to sensitivity-threshold
+    """
+    # alp = 0.5  ##whitenization amount
+    # ws = 3  ##window size-compate vectors of 4 values (so similar to EM)
+    # threshold = 0.15 # 0.05  ## related to sensitivity-threshold
+    # c = data[0]  ## constant to avoid 0 division in relative grey indices
+    ws = window_size + 1
+    alp = w_factor
+    c = data[0] if rel_grey_const is None else rel_grey_const
     neg_alp = 1 - alp
     for event in data[1:]:
         X = list(range(0, ws + 1))
