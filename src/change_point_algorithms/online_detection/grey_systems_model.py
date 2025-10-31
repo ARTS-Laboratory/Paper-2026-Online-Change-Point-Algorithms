@@ -1,5 +1,5 @@
 import math
-from collections.abc import Iterator
+from collections.abc import Iterator, Sequence, MutableSequence
 
 import numpy as np
 
@@ -141,7 +141,7 @@ def behavioral_sequence_ratio_2(window):
 
 
 @njit
-def behavior_relative_difference(window):
+def behavior_relative_difference(window) -> float:
     """ """
     head = window[0]
     tail = window[-1]
@@ -161,7 +161,7 @@ def behavior_relative_difference(window):
 
 
 @njit
-def behavior_log_difference(window):
+def behavior_log_difference(window) -> float:
     """ """
     head = window[0]
     tail = window[-1]
@@ -204,7 +204,7 @@ def grey_incidence_degree_ratio(val_1, val_2, c=1.0):
 
 
 @njit
-def get_rolling_window(obs, idx, n):
+def get_rolling_window(obs: np.ndarray, idx: int, n: int):
     """ Get window of size n with idx being start (inclusive)."""
     # this can be either way, we look forward but can look back
     # return obs[idx - n:idx]
@@ -212,7 +212,7 @@ def get_rolling_window(obs, idx, n):
 
 
 # @njit
-def get_rolling_window_inplace(obs, idx, n, out):
+def get_rolling_window_inplace(obs: np.ndarray, idx: int, n: int, out: np.ndarray):
     """ """
     out[:] = obs[idx:idx + n]
 
