@@ -218,7 +218,7 @@ def similitude(val_1, val_2, c=1.0):
     return 1.0 / (1.0 + c * abs(val_1 - val_2))
 
 
-@njit
+# @njit
 def get_rolling_window(obs: np.ndarray, idx: int, n: int):
     """ Get window of size n with idx being start (inclusive)."""
     # this can be either way, we look forward but can look back
