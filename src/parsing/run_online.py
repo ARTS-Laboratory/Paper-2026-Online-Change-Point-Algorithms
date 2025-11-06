@@ -4,6 +4,7 @@ from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 from pathlib import Path
 
+import more_itertools
 import numpy as np
 import polars as pl
 
@@ -248,6 +249,10 @@ def parse_run_saving(saves_config, run_save_config, df: pl.DataFrame):
 
 def online_model_results_to_polars(time: np.ndarray, results: Iterable[ResultType]):
     """ """
+    return online_model_results_to_polars_v1(time, results)
+
+def online_model_results_to_polars_v0(time: np.ndarray, results: Iterable[ResultType]):
+    """ """
     # arr_size = len(time)
     tuple_list = []
     for result in results:
@@ -259,5 +264,22 @@ def online_model_results_to_polars(time: np.ndarray, results: Iterable[ResultTyp
         tuples = ((name, time_point, prediction, time_point in change_point_times) for time_point, prediction in zip(time, predictions))
         # tuples = [(name, time_point, prediction) for time_point, prediction in zip(time, predictions)]
         tuple_list.extend(tuples)
+    df = pl.DataFrame(tuple_list, ['name', 'time', 'prediction', 'is_change_point'], orient='row')
+    return df
+
+def online_model_results_to_polars_v1(time: np.ndarray, results: Iterable[ResultType]):
+    """ """
+    # arr_size = len(time)
+    def results_to_polars_helper(result):
+        alg, shock_region, non_shock_region = result
+        name = alg.name
+        predictions = intervals_to_dense_arr(time, shock_region, non_shock_region)
+        change_point_times = set((start for start, end in itertools.chain(shock_region, non_shock_region)))
+        # change_point_times = more_itertools.unique_everseen(start for start, end in itertools.chain(shock_region, non_shock_region))
+        # change_points = [point in change_point_times for point in time]
+        return ((name, time_point, prediction, time_point in change_point_times) for time_point, prediction in zip(time, predictions))
+    tuple_list = list(
+        more_itertools.flatten(
+            results_to_polars_helper(result) for result in results))
     df = pl.DataFrame(tuple_list, ['name', 'time', 'prediction', 'is_change_point'], orient='row')
     return df
