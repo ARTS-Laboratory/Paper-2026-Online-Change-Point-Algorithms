@@ -176,55 +176,56 @@ def parse_run_online(config_file):
     config_table = load_toml(config_file)
     version = config_table['version']
     if version == '1':
-        file_path = Path(config_table['file-path'])
-        time, data = load_signals(file_path)
-        algs = read_model_config(config_file)
-        results = run_online_models(time, data, algs)
-        # convert to dataframe of time, model_name, prediction
-        df = online_model_results_to_polars(time, results)
-        print(df)
+        parse_run_online_for_v1(config_table)
     elif version == '2':
-        # Get data
-        data_config = config_table['data']
-        if data_config['what'] == 'array':
-            if 'dir' in data_config['where']:
-                file_path = Path(data_config['where']['dir'], data_config['where']['filename'])
-            else:
-                file_path = Path(data_config['where']['filename'])
-            time, data = load_signals(file_path)
-        else:
-            raise NotImplementedError(f"No implementation for data of type {data_config['what']}")
-        run_config = config_table['run']
-        # Make algorithm objects
-        algs = get_models_from_config(config_table['models'])
-        # Extra options
-        show_progress = run_config['show-progress']
-        # Choose algorithms to run
-        if run_config['run_all']:
-            chosen_algs = algs.values()
-        else:
-            names = run_config['model_names']
-            chosen_algs = (algs[name] for name in names)
-        results = run_online_models_v2(time, data, chosen_algs, with_progress=show_progress)
-        # Choose anomaly algorithms to run if enabled
-        anomaly_algs = get_anomaly_models_from_config(config_table['anomaly-models'])
-        # Choose algorithms to run
-        if run_config['run_all']:
-            chosen_algs = anomaly_algs.values()
-        else:
-            names = run_config['anomaly-model-names']
-            chosen_algs = (anomaly_algs[name] for name in names)
-        anomaly_results = run_offline_anomaly_models_v2(time, data, chosen_algs, with_progress=show_progress)
-        # convert to dataframe of time, model_name, prediction
-        df = online_model_results_to_polars(time, results)
-        print(df)
-        anomaly_df = online_model_results_to_polars(time, anomaly_results)
-        print(anomaly_df)
-        res_df = pl.concat([df, anomaly_df])
-        # Saving results
-        saves_config = config_table['saves']  # overall saving information
-        run_save_config = run_config['saving']  # run specific saving information
-        parse_run_saving(saves_config, run_save_config, res_df)
+        parse_run_online_for_v2(config_table)
+
+def parse_run_online_for_v1(config_table):
+    """ """
+    file_path = Path(config_table['file-path'])
+    time, data = load_signals(file_path)
+    algs = read_model_config(config_file)
+    results = run_online_models(time, data, algs)
+    # convert to dataframe of time, model_name, prediction
+    df = online_model_results_to_polars(time, results)
+    print(df)
+
+def parse_run_online_for_v2(config_table):
+    """ """
+    # Get data
+    data_config = config_table['data']
+    time, data = parse_run_data_config(data_config)
+    run_config = config_table['run']
+    # Make algorithm objects
+    algs = get_models_from_config(config_table['models'])
+    # Extra options
+    show_progress = run_config['show-progress']
+    # Choose algorithms to run
+    if run_config['run_all']:
+        chosen_algs = algs.values()
+    else:
+        names = run_config['model_names']
+        chosen_algs = (algs[name] for name in names)
+    results = run_online_models_v2(time, data, chosen_algs, with_progress=show_progress)
+    # Choose anomaly algorithms to run if enabled
+    anomaly_algs = get_anomaly_models_from_config(config_table['anomaly-models'])
+    # Choose algorithms to run
+    if run_config['run_all']:
+        chosen_algs = anomaly_algs.values()
+    else:
+        names = run_config['anomaly-model-names']
+        chosen_algs = (anomaly_algs[name] for name in names)
+    anomaly_results = run_offline_anomaly_models_v2(time, data, chosen_algs, with_progress=show_progress)
+    # convert to dataframe of time, model_name, prediction
+    df = online_model_results_to_polars(time, results)
+    print(df)
+    anomaly_df = online_model_results_to_polars(time, anomaly_results)
+    print(anomaly_df)
+    res_df = pl.concat([df, anomaly_df])
+    # Saving results
+    saves_config = config_table['saves']  # overall saving information
+    run_save_config = run_config['saving']  # run specific saving information
+    parse_run_saving(saves_config, run_save_config, res_df)
 
 
 def parse_run_saving(saves_config, run_save_config, df: pl.DataFrame):
