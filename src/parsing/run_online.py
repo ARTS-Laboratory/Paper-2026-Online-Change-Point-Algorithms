@@ -228,6 +228,21 @@ def parse_run_online_for_v2(config_table):
     parse_run_saving(saves_config, run_save_config, res_df)
 
 
+def parse_run_data_config(data_config):
+    """ """
+    if data_config['what'] == 'array':
+        if 'dir' in data_config['where']:
+            file_path = Path(data_config['where']['dir'], data_config['where']['filename'])
+        else:
+            file_path = Path(data_config['where']['filename'])
+        time, data = load_signals(file_path)
+    else:
+        raise NotImplementedError(f"No implementation for data of type {data_config['what']}")
+    return time, data
+
+# def parse_run_running():
+#     """ """
+
 def parse_run_saving(saves_config, run_save_config, df: pl.DataFrame):
     """ Parse 'saving' table of run config.
 
