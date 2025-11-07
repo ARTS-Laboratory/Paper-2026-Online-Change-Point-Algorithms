@@ -132,27 +132,27 @@ def behavioral_sequence(window):
     return (window[:-1] - window[0]).sum() + 0.5 * (window[-1] - window[0])
 
 
-@njit
-def behavioral_sequence_ratio(window, offset_2=1.0):
-    # This assumes window is composed only of nonnegative numbers
-    # new code
-    s_0 = (window[:-1] + offset_2).sum()
-    s_0 += 0.5 * (window[-1] + offset_2)
-    s_0 /= window[0] + offset_2
-    # old code
-    # s_0 = np.sum((window[:-1] + offset_2) / (window[0] + offset_2)) + 0.5 * ((window[-1] + offset_2) / (window[0] + offset_2))
-    return s_0
+# @njit
+# def behavioral_sequence_ratio(window, offset_2=1.0):
+#     # This assumes window is composed only of nonnegative numbers
+#     # new code
+#     s_0 = (window[:-1] + offset_2).sum()
+#     s_0 += 0.5 * (window[-1] + offset_2)
+#     s_0 /= window[0] + offset_2
+#     # old code
+#     # s_0 = np.sum((window[:-1] + offset_2) / (window[0] + offset_2)) + 0.5 * ((window[-1] + offset_2) / (window[0] + offset_2))
+#     return s_0
 
 
-@njit
-def behavioral_sequence_ratio_2(window):
-    """ """
-    head = window[0]
-    s_0 = 0.5 * (window[-1] - head + 1) / (0.5 * (np.abs(window[-1]) + np.abs(head) + 1))
-    for item in window[:-1]:
-        if item != 0.0 or window[0] != 0.0:
-            s_0 += (item - head)/((np.abs(item) + np.abs(head)) * 0.5)  #
-    return s_0
+# @njit
+# def behavioral_sequence_ratio_2(window):
+#     """ """
+#     head = window[0]
+#     s_0 = 0.5 * (window[-1] - head + 1) / (0.5 * (np.abs(window[-1]) + np.abs(head) + 1))
+#     for item in window[:-1]:
+#         if item != 0.0 or window[0] != 0.0:
+#             s_0 += (item - head)/((np.abs(item) + np.abs(head)) * 0.5)  #
+#     return s_0
 
 
 @njit
