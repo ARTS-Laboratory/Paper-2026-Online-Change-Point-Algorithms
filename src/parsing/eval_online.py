@@ -53,22 +53,6 @@ def parse_eval_online_for_v2(config_table):
     time, data = load_data_from_config(data_config)
     # Evaluate
     metrics_config = eval_config['metrics']
-    metric_names = metrics_config['scores']
-    predictions = df.select('name', 'prediction').group_by('name')
-    metric_fn = partial(get_select_scores, time, ground, metrics=metric_names)
-    scores = [(name[0],) + tuple(metric_fn(vals.select('prediction').to_numpy(order='c').flatten()).values()) for name, vals in predictions]
-    score_df = pl.DataFrame(scores, schema=['name']+metric_names, orient='row')
-    print(score_df)
-    formatted_score_df = score_df.select(
-        'name',
-        pl.col('accuracy').round(3),
-        pl.col('precision').round(3),
-        pl.col('recall').round(3),
-        pl.col('f1-score').round(3),
-        pl.col('delay').alias('delay (s)'),
-        (pl.col('delay') * 1_000).alias('delay (ms)'),
-    )
-    print(formatted_score_df)
     # Save
     eval_save_config = eval_config['saving']
     root = save_config['save-root'] if eval_save_config['is-subdir'] else None
@@ -95,6 +79,25 @@ def plot_detection(time, data, df, save_dir=None):
         detection_fig.savefig(Path(root, f'signal-1-detection-{name}.png'), dpi=300)
         # detection_fig.show()
         plt.close(detection_fig)
+
+def parse_eval_metrics_config():
+    """ """
+    metric_names = metrics_config['scores']
+    predictions = df.select('name', 'prediction').group_by('name')
+    metric_fn = partial(get_select_scores, time, ground, metrics=metric_names)
+    scores = [(name[0],) + tuple(metric_fn(vals.select('prediction').to_numpy(order='c').flatten()).values()) for name, vals in predictions]
+    score_df = pl.DataFrame(scores, schema=['name']+metric_names, orient='row')
+    print(score_df)
+    formatted_score_df = score_df.select(
+        'name',
+        pl.col('accuracy').round(3),
+        pl.col('precision').round(3),
+        pl.col('recall').round(3),
+        pl.col('f1-score').round(3),
+        pl.col('delay').alias('delay (s)'),
+        (pl.col('delay') * 1_000).alias('delay (ms)'),
+    )
+    print(formatted_score_df)
 
 def parse_eval_data_config(eval_data_config, save_config) -> pl.DataFrame:
     """ """
