@@ -127,8 +127,9 @@ def mean_sequence_inplace(window, out, alpha=0.5):
 
 @njit
 def behavioral_sequence(window):
-    s_0 = (window[:-1] - window[0]).sum() + 0.5 * (window[-1] - window[0])
-    return s_0
+    # s_0 = (window[:-1] - window[0]).sum() + 0.5 * (window[-1] - window[0])
+    # return s_0
+    return (window[:-1] - window[0]).sum() + 0.5 * (window[-1] - window[0])
 
 
 @njit
