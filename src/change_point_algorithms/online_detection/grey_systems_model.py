@@ -158,19 +158,24 @@ def behavioral_sequence_ratio_2(window):
 def behavior_relative_difference(window) -> float:
     """ """
     head = window[0]
-    tail = window[-1]
-    if head == 0 and tail == 0:
+    last = window[-1]
+    tail = window[1:]
+    abs_head = abs(head)
+    if head == 0 and last == 0:
         s_0 = 0
     else:
-        s_0 = 0.5 * abs(tail - head) / ( 0.5 * (abs(tail) + abs(head)))
+        s_0 = 0.5 * abs(last - head) / ( 0.5 * (abs(last) + abs_head))
     if head == 0.0:
-        for item in window[1:]:
-            if item != 0.0:
-                s_0 += abs(item - head) / (0.5 * (abs(item) + abs(head)))
-            # if head and item are zero, no difference
+        nonzeros = tail[tail != 0.0]
+        s_0 += (np.abs(nonzeros - head) / (0.5 * (np.abs(nonzeros) + abs_head))).sum()
+        # for item in window[1:]:
+        #     if item != 0.0:
+        #         s_0 += abs(item - head) / (0.5 * (abs(item) + abs(head)))
+        #     # if head and item are zero, no difference
     else:
-        for item in window[1:]:
-            s_0 += abs(item - head) / (0.5 * (abs(item) + abs(head)))
+        s_0 += (np.abs(window[1:] - head) / (0.5 * (np.abs(window[1:]) + abs(head)))).sum()
+        # for item in window[1:]:
+        #     s_0 += abs(item - head) / (0.5 * (abs(item) + abs(head)))
     return s_0
 
 
