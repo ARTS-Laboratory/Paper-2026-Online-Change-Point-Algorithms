@@ -1,9 +1,9 @@
-from unittest import case
-
 import numpy as np
 
+from collections.abc import Iterable, Mapping
 
-def convert_interval_indices_to_full_arr(shocks: tuple[int, int], nonshocks: tuple[int, int], arr_size: int) -> np.ndarray:
+
+def convert_interval_indices_to_full_arr(shocks: Iterable[tuple[int, int]], nonshocks: Iterable[tuple[int, int]], arr_size: int) -> np.ndarray:
     """ Converts intervals of indices to filled array"""
     arr = np.empty(arr_size, dtype=int)  # cast array to int for binary classification
     for start, end in shocks:
@@ -56,7 +56,7 @@ def convert_intervals_to_time_v2(time, intervals, cache_dict=None):
         return convert_intervals_to_time(time, intervals)
 
 
-def convert_intervals_to_time_memoized(time, intervals, cache_dict):
+def convert_intervals_to_time_memoized(time, intervals, cache_dict: Mapping):
     """
         :raises TypeError: if time is not a list or np.ndarray.
     """
@@ -72,7 +72,7 @@ def convert_intervals_to_time_memoized(time, intervals, cache_dict):
         raise TypeError
 
 
-def conversion_list_helper(time, start, stop, cache):
+def conversion_list_helper(time, start, stop, cache: Mapping):
     # idx_0, idx_1 = None, None
     if start in cache:
         idx_0 = cache[start]
@@ -87,7 +87,7 @@ def conversion_list_helper(time, start, stop, cache):
     return idx_0, idx_1
 
 
-def conversion_array_helper(time, start, stop, cache):
+def conversion_array_helper(time: np.ndarray, start: float, stop: float, cache: Mapping) -> tuple[int, int]:
     if start in cache:
         idx_0 = cache[start]
     else:
@@ -127,9 +127,8 @@ def get_deviation_array(time, data, shock_intervals, non_shock_intervals):
     return dev_levels
 
 
-def get_std_ratio(time, data, shock_intervals, non_shock_intervals):
-    """ """
-    devs = get_deviation_array(time, data, shock_intervals, non_shock_intervals)
-    base_val = devs[0]
-    return devs / base_val
-
+# def get_std_ratio(time, data, shock_intervals, non_shock_intervals):
+#     """ """
+#     devs = get_deviation_array(time, data, shock_intervals, non_shock_intervals)
+#     base_val = devs[0]
+#     return devs / base_val
