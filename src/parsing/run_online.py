@@ -177,11 +177,11 @@ def parse_run_online(config_file):
     config_table = load_toml(config_file)
     version = config_table['version']
     if version == '1':
-        parse_run_online_for_v1(config_table)
+        parse_run_online_for_v1(config_file, config_table)
     elif version == '2':
         parse_run_online_for_v2(config_table)
 
-def parse_run_online_for_v1(config_table):
+def parse_run_online_for_v1(config_file, config_table):
     """ """
     file_path = Path(config_table['file-path'])
     time, data = load_signals(file_path)
