@@ -39,7 +39,7 @@ def parse_eval_online_for_v2(config_table):
     """
     save_config = config_table['saves']
     eval_config = config_table['eval']
-    # Load data
+    # Load prediction data
     eval_data_config = eval_config['data']
     df = parse_eval_data_config(eval_data_config, save_config)
     print(df.head())
