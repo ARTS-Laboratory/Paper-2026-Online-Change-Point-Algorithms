@@ -129,23 +129,20 @@ def parse_eval_ground(eval_ground, data_config):
     """ Parse 'ground' table of eval config."""
     # Get ground truth
     ## Optionally: save ground truth
-    match eval_ground['what']:
-        case 'save':
-            dir = eval_ground['save']['dir']
-            name = eval_ground['save']['name']
-            eval_path = Path(dir, name)
+    match eval_ground:
+        case {'what': 'save', 'save': {'name': name, 'dir': folder}}:
+            eval_path = Path(folder, name)
             return get_ground_truth_from_file(eval_path)
-        case 'generate':
-            gen_config = eval_ground['generate']
-            alg = gen_config['alg']
-            gen_name = gen_config['name']
-            extras = gen_config.get('extras')
+        case {
+            'what': 'generate', 'generate': {
+                'alg': alg, 'name': _gen_name, 'extras': extras,
+                'saving': gen_save}
+        }:
             # Load data
             time, data = load_data_from_config(data_config)
             # Generate ground
             ground = generate_ground_truth(data, alg, extras)
             # now check if you want to save this for later.
-            gen_save = gen_config['saving']
             if gen_save['save']:
                 match gen_save['what']:
                     case 'npy' | 'numpy':
@@ -155,8 +152,36 @@ def parse_eval_ground(eval_ground, data_config):
                     case x:
                         raise NotImplementedError(f'No implementation for saving generated ground truth for {x}')
             return ground
-        case x:
+        case {'what': x}:
             raise ValueError(f'No option "{x}" for ground truth retrieval.')
+    # match eval_ground['what']:
+    #     case 'save':
+    #         dir = eval_ground['save']['dir']
+    #         name = eval_ground['save']['name']
+    #         eval_path = Path(dir, name)
+    #         return get_ground_truth_from_file(eval_path)
+    #     case 'generate':
+    #         gen_config = eval_ground['generate']
+    #         alg = gen_config['alg']
+    #         _gen_name = gen_config['name']
+    #         extras = gen_config.get('extras')
+    #         # Load data
+    #         time, data = load_data_from_config(data_config)
+    #         # Generate ground
+    #         ground = generate_ground_truth(data, alg, extras)
+    #         # now check if you want to save this for later.
+    #         gen_save = gen_config['saving']
+    #         if gen_save['save']:
+    #             match gen_save['what']:
+    #                 case 'npy' | 'numpy':
+    #                     dir = gen_save['where']['dir']
+    #                     name = gen_save['where']['save-name']
+    #                     np.save(Path(dir, name), ground)
+    #                 case x:
+    #                     raise NotImplementedError(f'No implementation for saving generated ground truth for {x}')
+    #         return ground
+    #     case x:
+    #         raise ValueError(f'No option "{x}" for ground truth retrieval.')
 
 def df_to_intervals(df: pl.DataFrame, last_time: float) -> dict[str, tuple]:
     """ Convert dataframe with reported change point times into dictionary of interval pairs."""
