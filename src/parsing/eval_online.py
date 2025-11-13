@@ -53,6 +53,7 @@ def parse_eval_online_for_v2(config_table):
     time, data = load_data_from_config(data_config)
     # Evaluate
     metrics_config = eval_config['metrics']
+    score_df = parse_eval_metrics_config(metrics_config, time, ground, df)
     # Save
     eval_save_config = eval_config['saving']
     root = save_config['save-root'] if eval_save_config['is-subdir'] else None
@@ -80,7 +81,7 @@ def plot_detection(time, data, df, save_dir=None):
         # detection_fig.show()
         plt.close(detection_fig)
 
-def parse_eval_metrics_config():
+def parse_eval_metrics_config(metrics_config, time, ground, df):
     """ """
     metric_names = metrics_config['scores']
     predictions = df.select('name', 'prediction').group_by('name')
@@ -98,6 +99,7 @@ def parse_eval_metrics_config():
         (pl.col('delay') * 1_000).alias('delay (ms)'),
     )
     print(formatted_score_df)
+    return score_df
 
 def parse_eval_data_config(eval_data_config, save_config) -> pl.DataFrame:
     """ """
