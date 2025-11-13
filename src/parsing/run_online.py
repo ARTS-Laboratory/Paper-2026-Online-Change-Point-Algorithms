@@ -13,6 +13,7 @@ from AnomalyAlgorithm import AnomalyType, AnomalyAlgorithm
 from DetectionAlgorithm import DetectionAlgorithm, ModelType, DetectionAlgorithmV2
 from model_runners.offline_anomaly_models import run_offline_anomaly_models_v2
 from model_runners.online_models import run_online_models, ResultType, run_online_models_v2
+from parsing.data_parsing import load_data_from_config
 from utils.detection_arr_helpers import intervals_to_dense_arr
 from utils.path_validation import confirm_dir_or_consult
 from utils.read_data import load_signals
@@ -194,7 +195,7 @@ def parse_run_online_for_v2(config_table):
     """ """
     # Get data
     data_config = config_table['data']
-    time, data = parse_run_data_config(data_config)
+    time, data = load_data_from_config(data_config)
     run_config = config_table['run']
     # Make algorithm objects
     algs = get_models_from_config(config_table['models'])
@@ -228,17 +229,17 @@ def parse_run_online_for_v2(config_table):
     parse_run_saving(saves_config, run_save_config, res_df)
 
 
-def parse_run_data_config(data_config):
-    """ """
-    if data_config['what'] == 'array':
-        if 'dir' in data_config['where']:
-            file_path = Path(data_config['where']['dir'], data_config['where']['filename'])
-        else:
-            file_path = Path(data_config['where']['filename'])
-        time, data = load_signals(file_path)
-    else:
-        raise NotImplementedError(f"No implementation for data of type {data_config['what']}")
-    return time, data
+# def parse_run_data_config(data_config):
+#     """ """
+#     if data_config['what'] == 'array':
+#         if 'dir' in data_config['where']:
+#             file_path = Path(data_config['where']['dir'], data_config['where']['filename'])
+#         else:
+#             file_path = Path(data_config['where']['filename'])
+#         time, data = load_signals(file_path)
+#     else:
+#         raise NotImplementedError(f"No implementation for data of type {data_config['what']}")
+#     return time, data
 
 # def parse_run_running():
 #     """ """
