@@ -1,20 +1,17 @@
 import itertools
 import os
 from functools import partial
-
-import numpy as np
-import polars as pl
-import matplotlib.pyplot as plt
-
 from pathlib import Path
 
-from analysis.shock_bounding import get_shock_start_and_end_times, get_shock_start_end_by_envelope
+import matplotlib.pyplot as plt
+import numpy as np
+import polars as pl
+
+from analysis.shock_bounding import get_shock_start_and_end_times
 from evals.ground_truth import get_ground_truth_from_file, generate_ground_truth
 from evals.scores import get_select_scores
 from fig_funcs.detection_plots import plot_shock_and_zoomed_for_paper
 from parsing.data_parsing import load_data_from_config
-from utils.path_validation import confirm_dir_or_consult
-from utils.read_data import load_signals
 from utils.toml_utils import load_toml
 
 
