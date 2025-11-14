@@ -8,7 +8,7 @@
 
 Cite this code as:
 
-Zhymir Thompson, Austin Downey. change-point-algorithms, September 2025. URL: https://github.com/ARTS-Laboratory/change-point-algorithms
+Zhymir Thompson, Austin Downey. change-point-algorithms, September 2025. URL: https://github.com/ARTS-Laboratory/Paper-2026-Online-Change-Point-Algorithms
 
 #### Bibtex
 
@@ -17,5 +17,5 @@ Zhymir Thompson, Austin Downey. change-point-algorithms, September 2025. URL: ht
   title = {Paper-2026-Online-Change-Point-Algorithms},  
   groups = {ARTS-Laboratory},  
   year = {2026},  
-  url = {https://github.com/ARTS-Laboratory/change-point-algorithms},  
+  url = {https://github.com/ARTS-Laboratory/Paper-2026-Online-Change-Point-Algorithms},
 }  
