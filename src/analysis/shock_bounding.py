@@ -25,7 +25,7 @@ def get_shock_start(time, data, safe_section, window_size: int, threshold_multip
 def get_shock_start_end_by_envelope(
         time: np.ndarray, data: np.ndarray, safe_section: np.ndarray, window_size: int,
         threshold_multiplier: float = 2.0) -> tuple[float, float]:
-    """ """
+    """ Get times for start and end of shock event using envelope."""
     # shock start is when envelope goes above threshold
     envelope = get_envelope_ndarray(data, window_size)
     # choose double the average envelope
@@ -37,6 +37,18 @@ def get_shock_start_end_by_envelope(
     stop_time: float = time[stop_idx + window_size]
     return start_time, stop_time
 
+def get_shock_start_end_indices_by_envelope(
+data: np.ndarray, safe_section: np.ndarray, window_size: int,
+        threshold_multiplier: float = 2.0) -> tuple[int, int]:
+    """ Get indices for start and end of shock event using envelope."""
+    # shock start is when envelope goes above threshold
+    envelope = get_envelope_ndarray(data, window_size)
+    # choose double the average envelope
+    max_envelope = np.max(np.abs(safe_section))
+    greater_than  = np.where(envelope > max_envelope * threshold_multiplier)[0]
+    start_idx: int = greater_than[0] + window_size
+    stop_idx: int = greater_than[-1] + window_size
+    return start_idx, stop_idx
 
 # def get_shock_start_index(data, safe_section, window_size: int, threshold_multiplier: float = 2.0):
 #     """ """

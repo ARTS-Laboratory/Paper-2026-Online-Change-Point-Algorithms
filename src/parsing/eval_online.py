@@ -1,20 +1,17 @@
 import itertools
 import os
 from functools import partial
-
-import numpy as np
-import polars as pl
-import matplotlib.pyplot as plt
-
 from pathlib import Path
 
-from analysis.shock_bounding import get_shock_start_and_end_times, get_shock_start_end_by_envelope
+import matplotlib.pyplot as plt
+import numpy as np
+import polars as pl
+
+from analysis.shock_bounding import get_shock_start_and_end_times
 from evals.ground_truth import get_ground_truth_from_file, generate_ground_truth
 from evals.scores import get_select_scores
 from fig_funcs.detection_plots import plot_shock_and_zoomed_for_paper
 from parsing.data_parsing import load_data_from_config
-from utils.path_validation import confirm_dir_or_consult
-from utils.read_data import load_signals
 from utils.toml_utils import load_toml
 
 
@@ -42,7 +39,7 @@ def parse_eval_online_for_v2(config_table):
     """
     save_config = config_table['saves']
     eval_config = config_table['eval']
-    # Load data
+    # Load prediction data
     eval_data_config = eval_config['data']
     df = parse_eval_data_config(eval_data_config, save_config)
     print(df.head())
@@ -53,6 +50,7 @@ def parse_eval_online_for_v2(config_table):
     time, data = load_data_from_config(data_config)
     # Evaluate
     metrics_config = eval_config['metrics']
+    score_df = parse_eval_metrics_config(metrics_config, time, ground, df)
     # Save
     eval_save_config = eval_config['saving']
     root = save_config['save-root'] if eval_save_config['is-subdir'] else None
@@ -80,7 +78,7 @@ def plot_detection(time, data, df, save_dir=None):
         # detection_fig.show()
         plt.close(detection_fig)
 
-def parse_eval_metrics_config():
+def parse_eval_metrics_config(metrics_config, time, ground, df):
     """ """
     metric_names = metrics_config['scores']
     predictions = df.select('name', 'prediction').group_by('name')
@@ -98,6 +96,7 @@ def parse_eval_metrics_config():
         (pl.col('delay') * 1_000).alias('delay (ms)'),
     )
     print(formatted_score_df)
+    return score_df
 
 def parse_eval_data_config(eval_data_config, save_config) -> pl.DataFrame:
     """ """
@@ -127,28 +126,20 @@ def parse_eval_ground(eval_ground, data_config):
     """ Parse 'ground' table of eval config."""
     # Get ground truth
     ## Optionally: save ground truth
-    match eval_ground['what']:
-        case 'save':
-            dir = eval_ground['save']['dir']
-            name = eval_ground['save']['name']
-            eval_path = Path(dir, name)
+    match eval_ground:
+        case {'what': 'save', 'save': {'name': name, 'dir': folder}}:
+            eval_path = Path(folder, name)
             return get_ground_truth_from_file(eval_path)
-        case 'generate':
-            gen_config = eval_ground['generate']
-            alg = gen_config['alg']
-            gen_name = gen_config['name']
+        case {
+            'what': 'generate', 'generate': {
+                'alg': alg, 'name': _gen_name, 'extras': extras,
+                'saving': gen_save}
+        }:
             # Load data
             time, data = load_data_from_config(data_config)
             # Generate ground
-            # ground = generate_ground_truth(data, alg=alg)
-            # todo integrate this in
-            start, stop = get_shock_start_end_by_envelope(time, data, data[:100_000], 1_000, 2)
-            # start, stop = get_shock_start_and_end_times(
-            #     time, data, data[:100_000], 1_000, 2, 0.5
-            # )
-            ground = np.where(np.logical_and(start <= time, time < stop), 1.0, 0.0)
+            ground = generate_ground_truth(data, alg, extras)
             # now check if you want to save this for later.
-            gen_save = gen_config['saving']
             if gen_save['save']:
                 match gen_save['what']:
                     case 'npy' | 'numpy':
@@ -158,8 +149,36 @@ def parse_eval_ground(eval_ground, data_config):
                     case x:
                         raise NotImplementedError(f'No implementation for saving generated ground truth for {x}')
             return ground
-        case x:
+        case {'what': x}:
             raise ValueError(f'No option "{x}" for ground truth retrieval.')
+    # match eval_ground['what']:
+    #     case 'save':
+    #         dir = eval_ground['save']['dir']
+    #         name = eval_ground['save']['name']
+    #         eval_path = Path(dir, name)
+    #         return get_ground_truth_from_file(eval_path)
+    #     case 'generate':
+    #         gen_config = eval_ground['generate']
+    #         alg = gen_config['alg']
+    #         _gen_name = gen_config['name']
+    #         extras = gen_config.get('extras')
+    #         # Load data
+    #         time, data = load_data_from_config(data_config)
+    #         # Generate ground
+    #         ground = generate_ground_truth(data, alg, extras)
+    #         # now check if you want to save this for later.
+    #         gen_save = gen_config['saving']
+    #         if gen_save['save']:
+    #             match gen_save['what']:
+    #                 case 'npy' | 'numpy':
+    #                     dir = gen_save['where']['dir']
+    #                     name = gen_save['where']['save-name']
+    #                     np.save(Path(dir, name), ground)
+    #                 case x:
+    #                     raise NotImplementedError(f'No implementation for saving generated ground truth for {x}')
+    #         return ground
+    #     case x:
+    #         raise ValueError(f'No option "{x}" for ground truth retrieval.')
 
 def df_to_intervals(df: pl.DataFrame, last_time: float) -> dict[str, tuple]:
     """ Convert dataframe with reported change point times into dictionary of interval pairs."""
