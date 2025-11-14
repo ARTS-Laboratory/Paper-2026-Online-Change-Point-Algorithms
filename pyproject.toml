@@ -23,20 +23,19 @@ classifiers = [
 dynamic = ["version"]
 readme = "README.md"
 
-dependencies = [
-    "kaleido", # need it for saving plots from plotly
+dependencies = [ # need it for saving plots from plotly
     "matplotlib", # plotting library
     "maturin",
     "numba", # speeding up some python functions
     "numpy",
-    "pandas", # table representation
-    "plotly", # plotting library
+    "pandas", # plotting library
     "scikit-learn",
     "scipy",
     "ruptures", # offline change point detection
     "tomlkit",
     "typer>=0.17.4",
     "polars>=1.33.1",
+    "more-itertools>=10.8.0",
 ]
 
 [project.optional-dependencies]
