@@ -56,27 +56,27 @@ def parse_eval_online_for_v2(config_table):
     root = save_config['save-root'] if eval_save_config['is-subdir'] else None
     parse_eval_save_config(eval_save_config, score_df, root)
     # Plotting detection
-    plot_detection(time, data, df, save_dir=root)
+    # plot_detection(time, data, df, save_dir=root)
 
-def plot_detection(time, data, df, save_dir=None):
-    """ """
-    root = '' if save_dir is None else save_dir
-    interval_dict = df_to_intervals(df, time[-1])
-    start, stop = get_shock_start_and_end_times(
-        time, data, data[:100_000], 1_000, 2, 0.95
-    )
-    print(f'Shock started {start:.6} seconds in and ended {stop:.6} seconds in.')
-    # x_left, x_right = 141.0e-3, 141.5e-3
-    x_left, x_right = 141.0e-3, 142.0e-3
-    for name, (shocks, nonshocks) in interval_dict.items():
-        print(f'Detection plot for {name}')
-        detection_fig = plot_shock_and_zoomed_for_paper(
-            time, data, shocks, nonshocks, x_left, x_right, to_ms=True, shock_start=start
-        )
-        # detection_fig.gca().axvline(x=x_left * 1_000, linestyle='--')
-        detection_fig.savefig(Path(root, f'signal-1-detection-{name}.png'), dpi=300)
-        # detection_fig.show()
-        plt.close(detection_fig)
+# def plot_detection(time, data, df, save_dir=None):
+#     """ """
+#     root = '' if save_dir is None else save_dir
+#     interval_dict = df_to_intervals(df, time[-1])
+#     start, stop = get_shock_start_and_end_times(
+#         time, data, data[:100_000], 1_000, 2, 0.95
+#     )
+#     print(f'Shock started {start:.6} seconds in and ended {stop:.6} seconds in.')
+#     # x_left, x_right = 141.0e-3, 141.5e-3
+#     x_left, x_right = 141.0e-3, 142.0e-3
+#     for name, (shocks, nonshocks) in interval_dict.items():
+#         print(f'Detection plot for {name}')
+#         detection_fig = plot_shock_and_zoomed_for_paper(
+#             time, data, shocks, nonshocks, x_left, x_right, to_ms=True, shock_start=start
+#         )
+#         # detection_fig.gca().axvline(x=x_left * 1_000, linestyle='--')
+#         detection_fig.savefig(Path(root, f'signal-1-detection-{name}.png'), dpi=300)
+#         # detection_fig.show()
+#         plt.close(detection_fig)
 
 def parse_eval_metrics_config(metrics_config, time, ground, df):
     """ """
