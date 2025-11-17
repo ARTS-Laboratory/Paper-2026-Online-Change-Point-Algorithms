@@ -1,0 +1,259 @@
+title = "Online Detection Config"
+version = "2"
+
+[data]
+what = "array"
+
+[data.where]
+dir = "./data/example-data/"
+filename = "example-1.npy"
+
+[saves]
+save-root = "./results/example-1" # may default to current directory
+create-if-new = true
+make-subdirs = true
+
+[analysis]
+
+[analysis.time-domain]
+# what am i looking for
+# whole signal
+# slice of signal
+
+# plot specific
+
+# save_dir
+# dpi, figsize
+# which plot
+#
+
+[analysis.freq-domain]
+# what am i looking for
+# fft
+# spectrogram
+# power spectrum
+
+[run]
+
+run_all = false
+#model_names = ["bocpd", "cusum", "expectation maximization", "grey"] # names of models to run
+model_names = ["bocpd", "cusum", "grey"] # names of models to run
+anomaly-model-names = ["svm", "isolation forest"]
+show-progress = true
+
+[run.saving] # save predictions
+#save = true
+save = true
+# directory to save files
+where = ""
+# is the directory a subdirectory of root or is it its own?
+is-subdir = true
+save-as = "csv"
+save-name = "signal-1-table"
+#
+#[run.saving.models]
+#[run.saving.detection-plots]
+#
+#[run.plotting.detection]
+#show = false
+#save = true
+#where = ""
+#is-subdir = true
+
+
+[eval]
+
+[eval.data]
+what = "csv"
+
+[eval.data.where]
+is-subdir = true
+dir = ""
+filename = "signal-1-table.csv"
+
+[eval.ground]
+what = "generate" # from save or generate
+
+[eval.ground.save]
+dir = "C:/Users/zhymi/github_repos/change-point-algorithms/data/processed_data/ground"
+name = "example-1-envelope-ground.npy"
+
+[eval.ground.generate]
+alg = "envelope"
+name = "example-1-envelope-ground"
+
+[eval.ground.generate.extras]
+safe_start = 0
+safe_end = 200
+window_size = 5
+threshold_multiplier = 2.0
+
+[eval.ground.generate.saving]
+# if loaded from generator, give option to save
+save = false
+what = "numpy"
+[eval.ground.generate.saving.where]
+dir = "./data/processed_data/ground"
+save-name = "example-1-envelope-ground.npy"
+
+
+[eval.metrics]
+# functions that will be in written table
+scores = ["accuracy", "precision", "recall", "f1-score", "delay"]
+unit-conversions = [
+    {base = "seconds", to = "milliseconds"}
+]
+
+# functions that we can run
+[eval.metrics.functions]
+accuracy = {function = "accuracy", table-name = "accuracy", units = "unitless"}
+precision = {function = "precision", table-name = "precision", units = "unitless"}
+f1-score = {function = "f1-score", table-name = "f1 score", units = "unitless"}
+delay = {function = "delay", table-name = "detection delay", units = "seconds"}
+earliest-correct = {function = "earliest-correct", table-name = "earliest correct", units = "seconds"}
+
+
+
+[eval.saving]
+save = true
+# directory to save files
+where = ""
+# is the directory a subdirectory of root or is it its own?
+is-subdir = true
+#how = "tex-table"
+#save-name = "filtered-table-1.tex"
+how = "csv"
+save-name = "filtered-table-1.csv"
+
+
+[model]
+
+show-progress = false
+save = false
+
+#[model.saving]
+
+[[models]]
+# no prior survivorship
+type = "bocpd"
+name = "bocpd"
+show-progress = true
+# Not implemented
+save-name = "bocpd_fig"
+
+[models.hyperparameters]
+alpha = 1.0 # 1/2 * kappa
+beta = 1.0 # alpha * sample variance
+mu = 0.0 #  sample mean
+kappa =  2.0
+lambda = 2.0 # 100
+
+#[[models]]
+#name = "bocpd"
+#show-progress = true
+## Not implemented
+#save-name = "bocpd_fig"
+#
+#[models.hyperparameters]
+#alpha = 50.0 # 1/2 * kappa
+#beta = 50.0 # alpha * sample variance
+#mu = 0.0 #  sample mean
+#kappa =  100.0
+#lambda = 100
+
+
+[[models]]
+type = "expectation maximization"
+name = "expectation maximization"
+show-progress = true
+save-name = "expecatation_maximization_fig"
+
+[models.hyperparameters]
+normal-mean = 0.0
+normal-variance = 100.0
+abnormal-mean = 60.0
+abnormal-variance = 100.0
+normal-data-size = 70
+abnormal-data-size = 30
+pi = 0.7 # if excluded, read as None
+epochs = 100
+
+
+[[models]]
+type = "cusum"
+name = "cusum"
+save-name = "cusum_fig"
+
+[models.hyperparameters]
+mean = 0.0
+standard-deviation = 10.0
+h = 3 #5
+alpha = 0.95
+
+
+[[models]]
+type = "grey"
+name = "grey"
+show-progress = true
+save-name = "grey_fig"
+#sample-data = ""
+
+[models.hyperparameters]
+window-size = 4 # 100
+critical-value = 1.5
+critical-ratio-value = 1.5 # 1.5
+alpha = 0.5 # weighted average
+
+[[models]]
+type = "grey"
+name = "new grey w-4"
+show-progress = true
+save-name = "grey_fig"
+#sample-data = ""
+
+[models.hyperparameters]
+window-size = 4 # 100
+critical-value = 1.0
+critical-ratio-value = 1.0
+alpha = 0.5 # weighted average
+
+[[models]]
+type = "grey"
+name = "new grey w-50"
+show-progress = true
+save-name = "grey_fig"
+#sample-data = ""
+
+[models.hyperparameters]
+window-size = 50 # 100
+critical-value = 1.0
+critical-ratio-value = 1.0
+alpha = 0.5 # weighted average
+
+
+# Offline anomaly models
+[[anomaly-models]]
+type = "svm"
+name = "svm"
+
+[anomaly-models.hyperparameters]
+safe = [
+    {mean = 0.0, std_dev = 10.0, num = 70}
+]
+unsafe = [
+    {mean = 60.0, std_dev = 10.0, num = 15},
+    {mean = -60.0, std_dev = 10.0, num = 15},
+]
+
+[[anomaly-models]]
+type = "isolation-forest"
+name = "isolation forest"
+
+[anomaly-models.hyperparameters]
+safe = [
+    {mean = 0.0, std_dev = 10.0, num = 70}
+]
+unsafe = [
+    {mean = 60.0, std_dev = 10.0, num = 15},
+    {mean = -60.0, std_dev = 10.0, num = 15},
+]
