@@ -61,7 +61,7 @@ class EnvelopeGround:
 
 def generate_ground_truth(data, alg, alg_context: Mapping | None = None):
     match alg:
-        case '':
+        case '' | 'binary segmentation':
             (true_shocks, true_nonshocks) = make_ground_truth(data)
             return convert_interval_indices_to_full_arr(true_shocks, true_nonshocks, len(data))
         case 'envelope':
