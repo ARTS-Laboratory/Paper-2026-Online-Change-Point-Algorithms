@@ -1,4 +1,5 @@
 import math
+import warnings
 from typing import Iterable
 
 import numpy as np
@@ -299,9 +300,17 @@ def get_em_model_from_generator(
     # sizes = [normal_size, abnormal_size]
     # em_model_gen = em_rust_hybrid(
     #     unknowns, mean_1, var_1, mean_2, var_2, pi, sizes, epochs)
-    em_model_gen = em_rust_hybrid(
-        unknowns, mean_1, math.sqrt(var_1), normal_size, mean_2, math.sqrt(var_2),
-        abnormal_size, pi, epochs)
+    try:
+        em_model_gen = em_rust_hybrid(
+            unknowns, mean_1, math.sqrt(var_1), normal_size, mean_2, math.sqrt(var_2),
+            abnormal_size, pi, epochs)
+    except NameError:
+        warnings.warn('PyO3 extension module not found. Defaulting to pure python EM.')
+        rng = np.random.default_rng()
+        safe = rng.normal(mean_1, math.sqrt(var_1), normal_size)
+        unsafe = rng.normal(mean_2, math.sqrt(var_2), abnormal_size)
+        em_model_gen = expectation_maximization_generator(
+            safe, unsafe, unknowns, mean_1, mean_2, var_1, var_2, pi, epochs)
     if with_progress:
         shocks, non_shocks = detection_to_intervals_for_generator_v1_with_progress(
             time, begin, em_model_gen, len(unknowns))

@@ -207,7 +207,7 @@ def get_bocpd_from_generator(
             shocks, non_shocks = detection_to_intervals_for_generator_v1(
                 time, begin, bocpd_model_gen)
     except NameError:
-        print('Exception occurred, reverting to python')
+        print("Couldn't load PyO3 function. Reverting to python BOCPD.")
         bocpd_model_gen = bocpd_generator(
                 data, mu, kappa, alpha, beta, lamb)
         if with_progress:
