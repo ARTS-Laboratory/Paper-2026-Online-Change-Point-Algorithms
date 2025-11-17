@@ -4,7 +4,10 @@ from collections.abc import Iterable
 
 import numpy as np
 from numba import njit, vectorize
-from change_point_algorithms import _change_point_algorithms
+try:
+    from change_point_algorithms import _change_point_algorithms
+except ImportError:
+    ...
 
 from change_point_algorithms.online_detection.model_helpers import (
     detection_to_intervals_for_generator_v1,

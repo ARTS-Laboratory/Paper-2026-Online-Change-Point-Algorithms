@@ -7,7 +7,10 @@ Created on Thu Dec 21 12:24:29 2023
 from collections import deque
 from enum import Enum
 
-from change_point_algorithms import _change_point_algorithms
+try:
+    from change_point_algorithms import _change_point_algorithms
+except ImportError:
+    ...
 from change_point_algorithms.online_detection.model_helpers import (
     detection_to_intervals_for_generator_v1_with_progress, detection_to_intervals_for_generator_v1)
 
