@@ -9,7 +9,7 @@ dir = "./data/example-data/"
 filename = "example-1.npy"
 
 [saves]
-save-root = "./figures/example-1" # may default to current directory
+save-root = "./results/example-1" # may default to current directory
 create-if-new = true
 make-subdirs = true
 
