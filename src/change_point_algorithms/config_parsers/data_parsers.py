@@ -2,7 +2,7 @@
 from enum import Enum
 from pathlib import Path
 
-from utils.read_data import load_signals
+from change_point_algorithms.utils.read_data import load_signals
 
 
 class DataSource(Enum):

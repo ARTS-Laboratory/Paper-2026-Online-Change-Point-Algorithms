@@ -52,7 +52,7 @@ jobs:
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
-          name: wheels-linux-${{ matrix.platform.target }}
+          name: wheels-linux-${{ matrix.platform.target }}-${{ matrix.python_version }}
           path: dist
       - name: pytest
         if: ${{ startsWith(matrix.platform.target, 'x86_64') }}
@@ -62,7 +62,7 @@ jobs:
           python3 -m venv .venv
           source .venv/bin/activate
           pip install change_point_algorithms --find-links dist --force-reinstall
-          pip install pytest
+          pip install pytest pytest-benchmark
           pytest
       - name: pytest
         if: ${{ !startsWith(matrix.platform.target, 'x86') && matrix.platform.target != 'ppc64' }}
@@ -74,7 +74,7 @@ jobs:
           install: |
             apt-get update
             apt-get install -y --no-install-recommends python3 python3-pip
-            pip3 install -U pip pytest
+            pip3 install -U pip pytest pytest-benchmark
           run: |
             set -e
             pip3 install change_point_algorithms --find-links dist --force-reinstall
@@ -109,7 +109,7 @@ jobs:
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
-          name: wheels-musllinux-${{ matrix.platform.target }}
+          name: wheels-musllinux-${{ matrix.platform.target }}-${{ matrix.python_version }}
           path: dist
       - name: pytest
         if: ${{ startsWith(matrix.platform.target, 'x86_64') }}
@@ -123,7 +123,7 @@ jobs:
             python3 -m virtualenv .venv
             source .venv/bin/activate
             pip install change_point_algorithms --no-index --find-links dist --force-reinstall
-            pip install pytest
+            pip install pytest pytest-benchmark
             pytest
       - name: pytest
         if: ${{ !startsWith(matrix.platform.target, 'x86') }}
@@ -138,7 +138,7 @@ jobs:
             set -e
             python3 -m virtualenv .venv
             source .venv/bin/activate
-            pip install pytest
+            pip install pytest pytest-benchmark
             pip install change_point_algorithms --find-links dist --force-reinstall
             pytest
 
@@ -167,7 +167,7 @@ jobs:
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
-          name: wheels-windows-${{ matrix.platform.target }}
+          name: wheels-windows-${{ matrix.platform.target }}-${{ matrix.python_version }}
           path: dist
       - name: pytest
         if: ${{ !startsWith(matrix.platform.target, 'aarch64') }}
@@ -177,7 +177,7 @@ jobs:
           python3 -m venv .venv
           source .venv/Scripts/activate
           pip install change_point_algorithms --find-links dist --force-reinstall
-          pip install pytest
+          pip install pytest pytest-benchmark
           pytest
 
   macos:
@@ -185,8 +185,8 @@ jobs:
     strategy:
       matrix:
         platform:
-          - runner: macos-13
-            target: x86_64
+#          - runner: macos-13
+#            target: x86_64
           - runner: macos-14
             target: aarch64
         python_version: ["3.10", "3.11", "3.12", "3.13"]
@@ -204,7 +204,7 @@ jobs:
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
-          name: wheels-macos-${{ matrix.platform.target }}
+          name: wheels-macos-${{ matrix.platform.target }}-${{ matrix.python_version }}
           path: dist
       - name: pytest
         run: |
@@ -212,7 +212,7 @@ jobs:
           python3 -m venv .venv
           source .venv/bin/activate
           pip install change_point_algorithms --find-links dist --force-reinstall
-          pip install pytest
+          pip install pytest pytest-benchmark
           pytest
 
   sdist:

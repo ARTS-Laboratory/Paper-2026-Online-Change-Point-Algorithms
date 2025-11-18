@@ -3,7 +3,7 @@ import tracemalloc
 import numpy as np
 
 from change_point_algorithms.online_detection.grey_systems_model import grey_model_generator
-from memory_profiling import profiling
+from change_point_algorithms.memory_profiling import profiling
 
 def get_benchmark_vars():
     mean, std_dev = 0.0, 1.0

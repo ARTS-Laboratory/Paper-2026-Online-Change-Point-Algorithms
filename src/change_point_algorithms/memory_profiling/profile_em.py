@@ -3,7 +3,7 @@ import tracemalloc
 
 import numpy as np
 
-from memory_profiling import profiling
+from change_point_algorithms.memory_profiling import profiling
 from change_point_algorithms.online_detection.expect_Max import expectation_maximization_generator
 
 

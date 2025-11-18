@@ -10,10 +10,10 @@ import polars as pl
 from matplotlib import pyplot as plt
 from numba.np.arrayobj import sliding_window_view
 
-import Hyperparameters
+from change_point_algorithms import Hyperparameters
 
-from DetectionAlgorithm import ModelType, DetectionAlgorithm, DetectionAlgorithmV2
-from fig_funcs.detection_plots import plot_shock
+from change_point_algorithms.DetectionAlgorithm import ModelType, DetectionAlgorithm, DetectionAlgorithmV2
+from change_point_algorithms.fig_funcs.detection_plots import plot_shock
 # from main import make_ground_truth, print_scores, write_metric_table
 from change_point_algorithms.online_detection import bocpd, cusum, expect_Max, grey_systems_model
 # from change_point_algorithms.online_detection import bocpd, cusum, expect_Max, grey_systems_model, nonparametric_model

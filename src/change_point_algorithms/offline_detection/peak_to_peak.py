@@ -7,8 +7,8 @@ Created on Thu Dec 21 12:32:16 2023
 
 import numpy as np
 
-from fig_funcs.detection_plots import plot_shock
-from utils.read_data import read_data_from_file
+from change_point_algorithms.fig_funcs.detection_plots import plot_shock
+from change_point_algorithms.utils.read_data import read_data_from_file
 
 
 def find_change_interval_v2(data):

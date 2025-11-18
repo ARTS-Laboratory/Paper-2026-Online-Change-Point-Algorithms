@@ -5,7 +5,7 @@
 
 from sklearn.ensemble import IsolationForest
 
-from offline_detection.offline_model_helpers import dense_to_time_intervals, estimator_prediction, \
+from change_point_algorithms.offline_detection.offline_model_helpers import dense_to_time_intervals, estimator_prediction, \
     format_single_feature_data
 
 

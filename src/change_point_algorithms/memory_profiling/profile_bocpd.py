@@ -1,8 +1,8 @@
 import tracemalloc
 
 from change_point_algorithms.online_detection.bocpd import bocpd_generator, bocpd_rust_hybrid
-from memory_profiling import profiling
-from memory_profiling.generate_data import generate_normal_data
+from change_point_algorithms.memory_profiling import profiling
+from change_point_algorithms.memory_profiling.generate_data import generate_normal_data
 
 
 def get_benchmark_vars():
