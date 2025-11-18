@@ -170,9 +170,13 @@ def power_spectra_sections(time, data):
     fig_size = (6.5, 3)
     fig, (ax_1, ax_2, ax_3) = plt.subplots(
         3, figsize=fig_size, sharex=True, layout='compressed')
-    plot_power_subplot(ax_1, time[:100_000], data[:100_000])
-    plot_power_subplot(ax_2, time[200_000:400_000], data[200_000:400_000])
-    plot_power_subplot(ax_3, time[400_000:], data[400_000:])
+    # We can use None for start and end if they are the ends of the original array
+    start_1, stop_1 = None, 100_000
+    start_2, stop_2 = 200_000, 400_000
+    start_3, stop_3 = 400_000, None
+    plot_power_subplot(ax_1, time[start_1:stop_1], data[start_1:stop_1])
+    plot_power_subplot(ax_2, time[start_2:stop_2], data[start_2:stop_2])
+    plot_power_subplot(ax_3, time[start_3:stop_3], data[start_3:stop_3])
     # Modifications
     freq_range = (0, 2_500)
     power_range = (1e-8, 1e3)
@@ -180,7 +184,7 @@ def power_spectra_sections(time, data):
     ax_2.set_xlabel('(b)')
     ax_3.set_xlabel('(c)\nfrequency (Hz)')
     ax_2.set_ylabel('PSD ((m/s\u00b2)\u00b2/Hz)')
-    ax_1.set_xlim([0, 2_500])
+    ax_1.set_xlim(freq_range)
     ax_1.set_ylim(power_range)
     ax_2.set_ylim(power_range)
     ax_3.set_ylim(power_range)
