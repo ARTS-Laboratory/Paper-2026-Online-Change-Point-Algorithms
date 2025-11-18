@@ -1,7 +1,5 @@
 import matplotlib as mpl
-import numpy as np
 import pandas as pd
-# import plotly.graph_objects as go
 from matplotlib import pyplot as plt
 
 from change_point_algorithms.fig_funcs._radar_chart import radar_factory
