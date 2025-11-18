@@ -30,9 +30,9 @@ def plot_metric_scores_matplotlib(ax, theta, values, ax_labels, labels, fill=Tru
     ax.set_varlabels(ax_labels)
     ax.set_rgrids([0.2, 0.4, 0.6, 0.8])
     ax.set_rlabel_angle(0)
-    val = 0.0  # 45.0
-    real = 2.5  # 0.5
-    angle = np.deg2rad(val)
+    # val = 0.0  # 45.0
+    # real = 2.5  # 0.5
+    # angle = np.deg2rad(val)
     # ax.legend(labels, loc='lower left',
     #           bbox_to_anchor=(0.5 + real*np.cos(angle)/2, 0.5 + real*np.sin(angle)/2))
     # ax.legend(labels, loc='upper right', bbox_to_anchor=(1, 1))
