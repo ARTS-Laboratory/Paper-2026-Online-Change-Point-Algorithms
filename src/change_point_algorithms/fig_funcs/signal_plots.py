@@ -87,17 +87,17 @@ def signal_with_overlays(time, data):
 
     # Plots for whole signal
     fig = plot_signal_for_display(time, data, ms=True, fig_size=fig_size)
-    plt.savefig('figures/full_signal.pdf')
+    fig.savefig('figures/full_signal.pdf')
     # y_lim = (-15, 15)
     y_lim = (min(min(data[:100_000]), min(data[400_000:])), max(max(data[:100_000]), max(data[400_000:])))
     normal_fig = plot_overlay(time[:100_000], data[:100_000], ms=True, fig_size=fig_size_2, ylim=y_lim)
-    plt.savefig('figures/safe_signal_overlay.pdf')
+    normal_fig.savefig('figures/safe_signal_overlay.pdf')
     # plt.close()
     normal_per_fig = plot_overlay(time[200_000:400_000], data[200_000:400_000], ms=True, fig_size=fig_size_2)
     # plt.savefig('figures/shock_overlay.pdf')
     # plt.close()
     post_shock_fig = plot_overlay(time[400_000:], data[400_000:], ms=True, fig_size=fig_size_2, ylim=y_lim)
-    plt.savefig('figures/post_shock_overlay.pdf')
+    normal_per_fig.savefig('figures/post_shock_overlay.pdf')
     # plt.close()
 
 
