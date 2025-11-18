@@ -24,8 +24,9 @@ def get_stdev_intervals_v2(
     devs = [] if deviation is None else deviation
     # Algorithm
     num_intervals = int(num_samples / interval_size)
-    for idx in range(0, num_samples, interval_size):
-        low, high = idx, idx + interval_size
+    for idx in range(0, num_intervals):
+        low = idx * interval_size
+        high = low + interval_size
         interval_stddev = find_change_interval(data[low:high])
         deviation.append(interval_stddev)
         if interval_stddev > stddev_shock:
