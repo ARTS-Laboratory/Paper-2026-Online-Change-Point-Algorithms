@@ -65,9 +65,9 @@ def abs_mean(vector: ndarray) -> ndarray:
     return np.mean(np.abs(vector), axis=-1)
 
 
-def rms(vector: ndarray) -> float:
-    """ Return root mean square of vector."""
-    return np.sqrt(np.mean(vector ** 2, axis=-1))
+# def rms(vector: ndarray) -> float:
+#     """ Return root mean square of vector."""
+#     return np.sqrt(np.mean(vector ** 2, axis=-1))
 
 
 def skewness(vector: ndarray) -> float:

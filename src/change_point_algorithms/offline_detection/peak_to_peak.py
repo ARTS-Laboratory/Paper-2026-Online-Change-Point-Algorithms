@@ -49,24 +49,24 @@ def get_peak_to_peak(
     return shocks, non_shocks
 
 
-def get_peak_to_peak(
-        time, data, shock_intervals=None, non_shock_intervals=None):
-    """ """
-    # Instantiating variables
-    shocks = [] if shock_intervals is None else shock_intervals
-    non_shocks = [] if non_shock_intervals is None else non_shock_intervals
-    for i in range(500):
-        low = 1000 * i
-        high = 999 * (i + 1) + i
-        if find_change_interval(data[low:high]):
-            shock_intervals.append((time[low], time[high - 1]))
-        else:
-            non_shock_intervals.append((time[low], time[high - 1]))
-    return shocks, non_shocks
+# def get_peak_to_peak(
+#         time, data, shock_intervals=None, non_shock_intervals=None):
+#     """ """
+#     # Instantiating variables
+#     shocks = [] if shock_intervals is None else shock_intervals
+#     non_shocks = [] if non_shock_intervals is None else non_shock_intervals
+#     for i in range(500):
+#         low = 1000 * i
+#         high = 999 * (i + 1) + i
+#         if find_change_interval(data[low:high]):
+#             shock_intervals.append((time[low], time[high - 1]))
+#         else:
+#             non_shock_intervals.append((time[low], time[high - 1]))
+#     return shocks, non_shocks
 
 
-def get_plot_peak_to_peak(file_path):
-    times, data = read_data_from_file(file_path)
-    shock_intervals, non_shock_intervals = get_peak_to_peak(times, data)
-    fig = plot_shock(times, data, shock_intervals, non_shock_intervals)
-    return shock_intervals, non_shock_intervals, fig
+# def get_plot_peak_to_peak(file_path):
+#     times, data = read_data_from_file(file_path)
+#     shock_intervals, non_shock_intervals = get_peak_to_peak(times, data)
+#     fig = plot_shock(times, data, shock_intervals, non_shock_intervals)
+#     return shock_intervals, non_shock_intervals, fig
