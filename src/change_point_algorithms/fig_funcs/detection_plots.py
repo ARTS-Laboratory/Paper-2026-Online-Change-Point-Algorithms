@@ -53,9 +53,10 @@ def plot_shock(time, data, shock_intervals, non_shock_intervals, to_ms=False):
     # fig = plt.figure(figsize=(6.5, 2), layout='compressed')
     # ax = plt.gca()
     fig, ax = plt.subplots(figsize=(6.5, 2), layout='compressed')
-    safe_color = 'blue'
-    unsafe_color = 'red'
-    shade_alpha = 0.3
+    # Commented out to use defaults
+    # safe_color = 'blue'
+    # unsafe_color = 'red'
+    # shade_alpha = 0.3
     y_min = -200
     y_max = 200
     plot_shock_v1(
