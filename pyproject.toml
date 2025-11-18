@@ -51,3 +51,9 @@ profiling = [
 progress = [
     "tqdm" # progress bars
 ]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.1",
+    "pytest-benchmark>=5.2.3",
+]
