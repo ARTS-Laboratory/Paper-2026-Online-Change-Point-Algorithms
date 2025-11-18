@@ -87,8 +87,8 @@ def plot_metric_scores_for_paper(df: pd.DataFrame):
     fig, ax = plt.subplots(figsize=(5, 2), layout='constrained', subplot_kw=dict(projection='radar'))
     plot_metric_scores_matplotlib(ax, theta, data_collection, metric_pretty_names, alg_pretty_names, fill=True)
     return fig
-    # Plotly version
-    fig = go.Figure()
-    plot_metric_scores_plotly(fig, data_collection, metric_pretty_names, alg_pretty_names)
-    return fig
+    # # Plotly version
+    # fig = go.Figure()
+    # plot_metric_scores_plotly(fig, data_collection, metric_pretty_names, alg_pretty_names)
+    # return fig
 
