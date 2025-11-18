@@ -4,7 +4,7 @@ import pandas as pd
 # import plotly.graph_objects as go
 from matplotlib import pyplot as plt
 
-from fig_funcs._radar_chart import radar_factory
+from change_point_algorithms.fig_funcs._radar_chart import radar_factory
 
 
 # def plot_radar_single_matplotlib(ax, data, ax_labels, label, fill):
