@@ -9,8 +9,9 @@ def plot_signal(ax: plt.Axes, time, data, ms=False):
     ylabel = 'acceleration (m/s\u00b2)'
     if ms:
         xlabel = 'time (ms)'
-        ax.plot(time * 1000, data)
-        ax.set_xlim([1000 * time[0], 1000 * time[-1]])
+        scalar = 1_000
+        ax.plot(time * scalar, data)
+        ax.set_xlim([scalar * time[0], scalar * time[-1]])
     else:
         xlabel = 'time (s)'
         ax.plot(time, data)
