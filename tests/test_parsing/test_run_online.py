@@ -1,6 +1,6 @@
 import numpy as np
 from change_point_algorithms.parsing.run_online import online_model_results_to_polars_v0, online_model_results_to_polars_v1
-from change_point_algorithms.DetectionAlgorithm import DetectionAlgorithm, DetectionAlgorithmV2, ModelType
+from change_point_algorithms.DetectionAlgorithm import DetectionAlgorithmV2, ModelType
 from polars.testing import assert_frame_equal
 
 def make_time():
