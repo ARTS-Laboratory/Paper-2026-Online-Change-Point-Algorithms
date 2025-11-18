@@ -1,9 +1,9 @@
-import numpy as np
 
 from benchmarks.benchmark_helpers import benchmark_generator
 from benchmarks.generate_data import generate_normal_data
-from change_point_algorithms.online_detection.cusum import cusum_alg_generator, get_cusum_from_generator, \
-    cusum_alg_v0_rust_hybrid, cusum_alg_v1_generator, cusum_alg_v1_rust_hybrid
+from change_point_algorithms.online_detection.cusum import (
+    cusum_alg_generator, cusum_alg_v0_rust_hybrid, cusum_alg_v1_generator,
+    cusum_alg_v1_rust_hybrid)
 
 
 def get_benchmark_vars():
