@@ -11,11 +11,11 @@ def plot_signal(ax: plt.Axes, time, data, ms=False):
         xlabel = 'time (ms)'
         scalar = 1_000
         ax.plot(time * scalar, data)
-        ax.set_xlim([scalar * time[0], scalar * time[-1]])
+        ax.set_xlim((scalar * time[0], scalar * time[-1]))
     else:
         xlabel = 'time (s)'
         ax.plot(time, data)
-        ax.set_xlim([time[0], time[-1]])
+        ax.set_xlim((time[0], time[-1]))
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     return ax
