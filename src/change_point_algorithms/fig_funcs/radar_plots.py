@@ -5,7 +5,6 @@ import pandas as pd
 from matplotlib import pyplot as plt
 
 from fig_funcs._radar_chart import radar_factory
-from utils.plotly_formatting import update_font
 
 
 # def plot_radar_single_matplotlib(ax, data, ax_labels, label, fill):
