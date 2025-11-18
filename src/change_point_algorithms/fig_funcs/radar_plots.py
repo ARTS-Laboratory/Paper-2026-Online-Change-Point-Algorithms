@@ -13,7 +13,7 @@ from fig_funcs._radar_chart import radar_factory
 def metric_scores_matplotlib_data(ax, theta, values, **kwargs):
     """ """
     colors = kwargs.get('colors', mpl.color_sequences['Set1'])
-    colors = kwargs['colors'] if 'colors' in kwargs else mpl.color_sequences['Set1']
+    fill = kwargs.get('fill', True)
     for d, color in zip(values, colors):
         ax.plot(theta, d, color=color)
         if fill:
