@@ -2,7 +2,7 @@ from scipy.fft import rfft, rfftfreq
 from scipy.signal import periodogram
 import matplotlib.pyplot as plt
 
-from utils import metrics
+from change_point_algorithms.utils import metrics
 
 
 def plot_signal(ax: plt.Axes, time, data, ms=False):
