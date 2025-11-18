@@ -1,7 +1,7 @@
 import matplotlib as mpl
 import numpy as np
 import pandas as pd
-import plotly.graph_objects as go
+# import plotly.graph_objects as go
 from matplotlib import pyplot as plt
 
 from fig_funcs._radar_chart import radar_factory
@@ -41,22 +41,22 @@ def plot_metric_scores_matplotlib(ax, theta, values, ax_labels, labels, fill=Tru
 
 # def plot_metric_bars(ax, values, )
 
-def plot_radar_single(fig: go.Figure, values, theta, name, fill):
-    """ Add radar plot for a single metric table to figure."""
-    fig.add_trace(
-        go.Scatterpolar(r=values, theta=theta, fill = fill, name=name))
-    return fig
+# def plot_radar_single(fig: go.Figure, values, theta, name, fill):
+#     """ Add radar plot for a single metric table to figure."""
+#     fig.add_trace(
+#         go.Scatterpolar(r=values, theta=theta, fill = fill, name=name))
+#     return fig
 
 
-def plot_metric_scores_plotly(fig: go.Figure, data_collection, axis_names, labels, fill=None):
-    """ """
-    fill_type = fill if fill is not None else 'toself'
-    # append beginning to end to close chart
-    # make chart
-    update_font(fig)
-    for (data, label) in zip(data_collection, labels):
-        plot_radar_single(fig, data, axis_names, label, fill_type)
-    return fig
+# def plot_metric_scores_plotly(fig: go.Figure, data_collection, axis_names, labels, fill=None):
+#     """ """
+#     fill_type = fill if fill is not None else 'toself'
+#     # append beginning to end to close chart
+#     # make chart
+#     update_font(fig)
+#     for (data, label) in zip(data_collection, labels):
+#         plot_radar_single(fig, data, axis_names, label, fill_type)
+#     return fig
 
 def plot_metric_scores_for_paper(df: pd.DataFrame):
     """ """
