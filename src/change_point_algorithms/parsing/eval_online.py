@@ -7,12 +7,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import polars as pl
 
-from analysis.shock_bounding import get_shock_start_and_end_times
-from evals.ground_truth import get_ground_truth_from_file, generate_ground_truth
-from evals.scores import get_select_scores
-from fig_funcs.detection_plots import plot_shock_and_zoomed_for_paper
-from parsing.data_parsing import load_data_from_config
-from utils.toml_utils import load_toml
+from change_point_algorithms.analysis.shock_bounding import get_shock_start_and_end_times
+from change_point_algorithms.evals.ground_truth import get_ground_truth_from_file, generate_ground_truth
+from change_point_algorithms.evals.scores import get_select_scores
+from change_point_algorithms.fig_funcs.detection_plots import plot_shock_and_zoomed_for_paper
+from change_point_algorithms.parsing.data_parsing import load_data_from_config
+from change_point_algorithms.utils.toml_utils import load_toml
 
 
 def parse_eval_online(config_file):

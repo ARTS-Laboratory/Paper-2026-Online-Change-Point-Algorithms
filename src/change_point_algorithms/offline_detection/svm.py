@@ -1,7 +1,7 @@
 from collections.abc import Sequence
 
 import numpy as np
-from offline_detection.offline_model_helpers import (
+from change_point_algorithms.offline_detection.offline_model_helpers import (
     dense_to_time_intervals, estimator_prediction,
     format_single_feature_data)
 from sklearn.svm import SVC

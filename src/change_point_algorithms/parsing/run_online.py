@@ -8,16 +8,16 @@ import more_itertools
 import numpy as np
 import polars as pl
 
-import Hyperparameters
-from AnomalyAlgorithm import AnomalyType, AnomalyAlgorithm
-from DetectionAlgorithm import DetectionAlgorithm, ModelType, DetectionAlgorithmV2
-from model_runners.offline_anomaly_models import run_offline_anomaly_models_v2
-from model_runners.online_models import run_online_models, ResultType, run_online_models_v2
-from parsing.data_parsing import load_data_from_config
-from utils.detection_arr_helpers import intervals_to_dense_arr
-from utils.path_validation import confirm_dir_or_consult
-from utils.read_data import load_signals
-from utils.toml_utils import load_toml
+from change_point_algorithms import Hyperparameters
+from change_point_algorithms.AnomalyAlgorithm import AnomalyType, AnomalyAlgorithm
+from change_point_algorithms.DetectionAlgorithm import DetectionAlgorithm, ModelType, DetectionAlgorithmV2
+from change_point_algorithms.model_runners.offline_anomaly_models import run_offline_anomaly_models_v2
+from change_point_algorithms.model_runners.online_models import run_online_models, ResultType, run_online_models_v2
+from change_point_algorithms.parsing.data_parsing import load_data_from_config
+from change_point_algorithms.utils.detection_arr_helpers import intervals_to_dense_arr
+from change_point_algorithms.utils.path_validation import confirm_dir_or_consult
+from change_point_algorithms.utils.read_data import load_signals
+from change_point_algorithms.utils.toml_utils import load_toml
 
 
 def read_model_config(config_file: os.PathLike):

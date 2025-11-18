@@ -8,8 +8,8 @@ import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.patches import Rectangle
 
-from utils import metrics
-from utils.detection_arr_helpers import get_mean_array, convert_intervals_to_time, get_deviation_array
+from change_point_algorithms.utils import metrics
+from change_point_algorithms.utils.detection_arr_helpers import get_mean_array, convert_intervals_to_time, get_deviation_array
 
 
 def interval_histogram(time, data, shock_intervals, non_shock_intervals, title=True):

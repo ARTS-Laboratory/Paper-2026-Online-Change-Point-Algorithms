@@ -1,6 +1,6 @@
-from analysis.signal_plots import plot_signals, plot_offline_detections
-from parsing.data_parsing import load_data_from_config
-from utils.toml_utils import load_toml
+from change_point_algorithms.analysis.signal_plots import plot_signals, plot_offline_detections
+from change_point_algorithms.parsing.data_parsing import load_data_from_config
+from change_point_algorithms.utils.toml_utils import load_toml
 
 
 def parse_analyze(config_file):

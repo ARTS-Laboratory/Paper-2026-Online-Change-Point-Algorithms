@@ -2,10 +2,10 @@ from pathlib import Path
 
 from matplotlib import pyplot as plt
 
-from fig_funcs.signal_plots import plot_signal_for_display, plot_signal_fft, plot_signal_power_spectrum, \
+from change_point_algorithms.fig_funcs.signal_plots import plot_signal_for_display, plot_signal_fft, plot_signal_power_spectrum, \
     plot_signal_for_flowchart, power_spectra_sections, signal_with_inset_axes_for_paper
-from fig_funcs.spectrogram_plots import get_spectrogram, plot_spectrogram_for_display, plot_spectrogram_for_paper
-from utils.write_data import save_path
+from change_point_algorithms.fig_funcs.spectrogram_plots import get_spectrogram, plot_spectrogram_for_display, plot_spectrogram_for_paper
+from change_point_algorithms.utils.write_data import save_path
 
 
 # Constants

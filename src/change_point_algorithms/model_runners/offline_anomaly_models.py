@@ -6,11 +6,11 @@ import sklearn
 from matplotlib import pyplot as plt
 from sklearn.model_selection import train_test_split
 
-from AnomalyAlgorithm import AnomalyType, AnomalyAlgorithm
-from Hyperparameters import SafeUnsafeNormalMixtureHyperparams, NormalDistParams
-from fig_funcs.detection_plots import plot_shock
-from offline_detection.isolation_forest import get_iso_forest
-from offline_detection.svm import get_svm_model
+from change_point_algorithms.AnomalyAlgorithm import AnomalyType, AnomalyAlgorithm
+from change_point_algorithms.Hyperparameters import SafeUnsafeNormalMixtureHyperparams, NormalDistParams
+from change_point_algorithms.fig_funcs.detection_plots import plot_shock
+from change_point_algorithms.offline_detection.isolation_forest import get_iso_forest
+from change_point_algorithms.offline_detection.svm import get_svm_model
 
 
 def run_offline_anomaly_models(time: Sequence[float], safe: np.ndarray, unsafe: np.ndarray, data: np.ndarray, models: Sequence[

@@ -4,7 +4,7 @@ from pathlib import Path
 
 import numpy as np
 
-from utils.read_data import load_signals
+from change_point_algorithms.utils.read_data import load_signals
 
 class GroundSource(Enum):
     SAVE = 'save'

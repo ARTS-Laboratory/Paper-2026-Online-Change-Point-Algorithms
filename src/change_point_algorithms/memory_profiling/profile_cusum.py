@@ -1,8 +1,8 @@
 import tracemalloc
 
 from change_point_algorithms.online_detection.cusum import cusum_alg_generator, cusum_alg_v0_generator_v1
-from memory_profiling.generate_data import generate_normal_data
-from memory_profiling.profiling import profile_model_run
+from change_point_algorithms.memory_profiling.generate_data import generate_normal_data
+from change_point_algorithms.memory_profiling.profiling import profile_model_run
 
 
 def get_benchmark_vars():
