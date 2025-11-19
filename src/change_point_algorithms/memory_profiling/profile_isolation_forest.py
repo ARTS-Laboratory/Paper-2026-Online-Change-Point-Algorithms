@@ -8,7 +8,7 @@ from change_point_algorithms.AnomalyAlgorithm import AnomalyType
 
 
 def get_benchmark_vars():
-    data_size = 400_000
+    data_size = 10_000
     half_data_size = data_size // 2
     time_vec = np.linspace(0, 10, data_size)
     safe_mean, unsafe_mean = 0.0, 50.0

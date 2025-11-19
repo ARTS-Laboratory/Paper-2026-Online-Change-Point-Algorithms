@@ -4,7 +4,7 @@ from change_point_algorithms.online_detection.bocpd import bocpd_generator, bocp
 
 
 def get_benchmark_vars():
-    data_size = 400_000 # 10_000
+    data_size = 10_000
     # rng = np.random.default_rng()
     alpha, beta, mu, kappa, lamb = 1.0, 1.0, 0.0, 2.0, 2.0
     std_dev = 1.0
