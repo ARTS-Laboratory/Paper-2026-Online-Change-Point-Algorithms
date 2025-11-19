@@ -1,24 +1,20 @@
-import math
 
 from dataclasses import asdict
 from pathlib import Path
 from typing import TypeAlias, Iterable
 
 import numpy as np
-import polars as pl
 
 from matplotlib import pyplot as plt
-from numba.np.arrayobj import sliding_window_view
 
 from change_point_algorithms import Hyperparameters
 
 from change_point_algorithms.DetectionAlgorithm import ModelType, DetectionAlgorithm, DetectionAlgorithmV2
 from change_point_algorithms.fig_funcs.detection_plots import plot_shock
 # from main import make_ground_truth, print_scores, write_metric_table
-from change_point_algorithms.online_detection import bocpd, cusum, expect_Max, grey_systems_model
+from change_point_algorithms.online_detection import bocpd, cusum
 # from change_point_algorithms.online_detection import bocpd, cusum, expect_Max, grey_systems_model, nonparametric_model
-from change_point_algorithms.online_detection.bocpd import get_bocpd_from_generator
-from change_point_algorithms.online_detection.expect_Max import get_em_from_generator, get_em_model_from_generator
+from change_point_algorithms.online_detection.expect_Max import get_em_model_from_generator
 from change_point_algorithms.online_detection.grey_systems_model import get_grey_from_generator
 # from change_point_algorithms.online_detection.nonparametric_model import get_nonparametric_model_from_generator
 

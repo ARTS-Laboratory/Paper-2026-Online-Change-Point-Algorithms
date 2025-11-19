@@ -24,6 +24,6 @@ def get_benchmark_vars():
 
 def test_benchmark_isolation_forest_from_python(benchmark):
     time_vec, safe, unsafe, data = get_benchmark_vars()
-    anom_results = run_offline_anomaly_models(time_vec, safe, unsafe, data, (AnomalyType.ISO_FOREST,))
+    # run_offline_anomaly_models(time_vec, safe, unsafe, data, (AnomalyType.ISO_FOREST,))
     out = benchmark(benchmark_generator, run_offline_anomaly_models, time_vec, safe, unsafe, data, (AnomalyType.ISO_FOREST,))
     assert out is not None

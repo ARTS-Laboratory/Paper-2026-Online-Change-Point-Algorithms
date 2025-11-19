@@ -1,6 +1,4 @@
 import ruptures as rpt
-import matplotlib.pyplot as plt
-import numpy as np
 
 
 def guess_breaks(signal, model_type='l2'):

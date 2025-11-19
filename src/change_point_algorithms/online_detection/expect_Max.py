@@ -240,8 +240,8 @@ def em_rust_hybrid(data, safe_mean: float, safe_stddev: float, num_safe: int, un
         model = _change_point_algorithms.build_em_early_stop_model(
             (safe_mean, safe_stddev, pi), [(unsafe_mean, unsafe_stddev, 1 - pi)],
             [num_safe, num_unsafe], epochs=epochs,)
-        update_model = model.update_check_convergence
-        predict_model = model.predict
+        # update_model = model.update_check_convergence
+        # predict_model = model.predict
         for idx, event in enumerate(data):
             model.update_check_convergence(event, early_stop_threshold)
             probability = model.predict(event)
