@@ -11,7 +11,7 @@ def get_benchmark_vars():
     std_dev = 5.0
     h = 5
     alpha = 0.95
-    data_size = 400_000 # 10_000
+    data_size = 10_000
     # rng = np.random.default_rng()
     # data = rng.normal(mean, std_dev, size=data_size)
     data = generate_normal_data(mean, std_dev, data_size)

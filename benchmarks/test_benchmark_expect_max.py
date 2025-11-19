@@ -19,7 +19,7 @@ def get_benchmark_vars():
     safe_size, unsafe_size = 70, 30
     pi = 0.3
     epochs = 100
-    num_unknowns = 400_000
+    num_unknowns = 10_000
     rng = np.random.default_rng()
     safe = rng.normal(mean_1, math.sqrt(var_1), safe_size)
     unsafe = rng.normal(mean_2, math.sqrt(var_2), unsafe_size)
