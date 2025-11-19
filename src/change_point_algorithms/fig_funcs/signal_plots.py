@@ -2,19 +2,20 @@ from scipy.fft import rfft, rfftfreq
 from scipy.signal import periodogram
 import matplotlib.pyplot as plt
 
-from utils import metrics
+from change_point_algorithms.utils import metrics
 
 
 def plot_signal(ax: plt.Axes, time, data, ms=False):
     ylabel = 'acceleration (m/s\u00b2)'
     if ms:
         xlabel = 'time (ms)'
-        ax.plot(time * 1000, data)
-        ax.set_xlim([1000 * time[0], 1000 * time[-1]])
+        scalar = 1_000
+        ax.plot(time * scalar, data)
+        ax.set_xlim((scalar * time[0], scalar * time[-1]))
     else:
         xlabel = 'time (s)'
         ax.plot(time, data)
-        ax.set_xlim([time[0], time[-1]])
+        ax.set_xlim((time[0], time[-1]))
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     return ax
@@ -86,17 +87,17 @@ def signal_with_overlays(time, data):
 
     # Plots for whole signal
     fig = plot_signal_for_display(time, data, ms=True, fig_size=fig_size)
-    plt.savefig('figures/full_signal.pdf')
+    fig.savefig('figures/full_signal.pdf')
     # y_lim = (-15, 15)
     y_lim = (min(min(data[:100_000]), min(data[400_000:])), max(max(data[:100_000]), max(data[400_000:])))
     normal_fig = plot_overlay(time[:100_000], data[:100_000], ms=True, fig_size=fig_size_2, ylim=y_lim)
-    plt.savefig('figures/safe_signal_overlay.pdf')
+    normal_fig.savefig('figures/safe_signal_overlay.pdf')
     # plt.close()
     normal_per_fig = plot_overlay(time[200_000:400_000], data[200_000:400_000], ms=True, fig_size=fig_size_2)
     # plt.savefig('figures/shock_overlay.pdf')
     # plt.close()
     post_shock_fig = plot_overlay(time[400_000:], data[400_000:], ms=True, fig_size=fig_size_2, ylim=y_lim)
-    plt.savefig('figures/post_shock_overlay.pdf')
+    normal_per_fig.savefig('figures/post_shock_overlay.pdf')
     # plt.close()
 
 
@@ -169,9 +170,13 @@ def power_spectra_sections(time, data):
     fig_size = (6.5, 3)
     fig, (ax_1, ax_2, ax_3) = plt.subplots(
         3, figsize=fig_size, sharex=True, layout='compressed')
-    plot_power_subplot(ax_1, time[:100_000], data[:100_000])
-    plot_power_subplot(ax_2, time[200_000:400_000], data[200_000:400_000])
-    plot_power_subplot(ax_3, time[400_000:], data[400_000:])
+    # We can use None for start and end if they are the ends of the original array
+    start_1, stop_1 = None, 100_000
+    start_2, stop_2 = 200_000, 400_000
+    start_3, stop_3 = 400_000, None
+    plot_power_subplot(ax_1, time[start_1:stop_1], data[start_1:stop_1])
+    plot_power_subplot(ax_2, time[start_2:stop_2], data[start_2:stop_2])
+    plot_power_subplot(ax_3, time[start_3:stop_3], data[start_3:stop_3])
     # Modifications
     freq_range = (0, 2_500)
     power_range = (1e-8, 1e3)
@@ -179,7 +184,7 @@ def power_spectra_sections(time, data):
     ax_2.set_xlabel('(b)')
     ax_3.set_xlabel('(c)\nfrequency (Hz)')
     ax_2.set_ylabel('PSD ((m/s\u00b2)\u00b2/Hz)')
-    ax_1.set_xlim([0, 2_500])
+    ax_1.set_xlim(freq_range)
     ax_1.set_ylim(power_range)
     ax_2.set_ylim(power_range)
     ax_3.set_ylim(power_range)

@@ -6,7 +6,7 @@ from change_point_algorithms.AnomalyAlgorithm import AnomalyType
 
 
 def get_benchmark_vars():
-    data_size = 400_000
+    data_size = 10_000
     half_data_size = data_size // 2
     time_vec = np.linspace(0, 10, data_size)
     safe_mean, unsafe_mean = 0.0, 50.0
@@ -24,6 +24,6 @@ def get_benchmark_vars():
 
 def test_benchmark_isolation_forest_from_python(benchmark):
     time_vec, safe, unsafe, data = get_benchmark_vars()
-    anom_results = run_offline_anomaly_models(time_vec, safe, unsafe, data, (AnomalyType.ISO_FOREST,))
+    # run_offline_anomaly_models(time_vec, safe, unsafe, data, (AnomalyType.ISO_FOREST,))
     out = benchmark(benchmark_generator, run_offline_anomaly_models, time_vec, safe, unsafe, data, (AnomalyType.ISO_FOREST,))
     assert out is not None

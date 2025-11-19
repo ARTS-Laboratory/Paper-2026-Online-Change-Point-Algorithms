@@ -1,5 +1,5 @@
 import math
-from collections.abc import Iterator, Sequence, MutableSequence
+from collections.abc import Iterator
 
 import numpy as np
 

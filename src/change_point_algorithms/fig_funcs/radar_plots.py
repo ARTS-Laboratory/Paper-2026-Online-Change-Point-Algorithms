@@ -1,11 +1,8 @@
 import matplotlib as mpl
-import numpy as np
 import pandas as pd
-# import plotly.graph_objects as go
 from matplotlib import pyplot as plt
 
-from fig_funcs._radar_chart import radar_factory
-from utils.plotly_formatting import update_font
+from change_point_algorithms.fig_funcs._radar_chart import radar_factory
 
 
 # def plot_radar_single_matplotlib(ax, data, ax_labels, label, fill):
@@ -14,7 +11,7 @@ from utils.plotly_formatting import update_font
 def metric_scores_matplotlib_data(ax, theta, values, **kwargs):
     """ """
     colors = kwargs.get('colors', mpl.color_sequences['Set1'])
-    colors = kwargs['colors'] if 'colors' in kwargs else mpl.color_sequences['Set1']
+    fill = kwargs.get('fill', True)
     for d, color in zip(values, colors):
         ax.plot(theta, d, color=color)
         if fill:
@@ -31,9 +28,9 @@ def plot_metric_scores_matplotlib(ax, theta, values, ax_labels, labels, fill=Tru
     ax.set_varlabels(ax_labels)
     ax.set_rgrids([0.2, 0.4, 0.6, 0.8])
     ax.set_rlabel_angle(0)
-    val = 0.0  # 45.0
-    real = 2.5  # 0.5
-    angle = np.deg2rad(val)
+    # val = 0.0  # 45.0
+    # real = 2.5  # 0.5
+    # angle = np.deg2rad(val)
     # ax.legend(labels, loc='lower left',
     #           bbox_to_anchor=(0.5 + real*np.cos(angle)/2, 0.5 + real*np.sin(angle)/2))
     # ax.legend(labels, loc='upper right', bbox_to_anchor=(1, 1))
@@ -88,8 +85,8 @@ def plot_metric_scores_for_paper(df: pd.DataFrame):
     fig, ax = plt.subplots(figsize=(5, 2), layout='constrained', subplot_kw=dict(projection='radar'))
     plot_metric_scores_matplotlib(ax, theta, data_collection, metric_pretty_names, alg_pretty_names, fill=True)
     return fig
-    # Plotly version
-    fig = go.Figure()
-    plot_metric_scores_plotly(fig, data_collection, metric_pretty_names, alg_pretty_names)
-    return fig
+    # # Plotly version
+    # fig = go.Figure()
+    # plot_metric_scores_plotly(fig, data_collection, metric_pretty_names, alg_pretty_names)
+    # return fig
 

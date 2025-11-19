@@ -8,7 +8,7 @@ def get_benchmark_vars():
     window_size = 10
     c = 1.5
     c_ratio = 1.5
-    data_size = 400_000# 10_000
+    data_size = 10_000
     data = generate_normal_data(mean, std_dev, data_size)
     return data, window_size, c, c_ratio
 

@@ -17,4 +17,4 @@ def set_rc_params():
     plt.rcParams.update({'mathtext.rm': 'serif'})
     # plt.rcParams.update({'mathtext.fontset': 'custom'}) # I don't think I need this as its set to 'stixsans' above.
 
-    cc = plt.rcParams['axes.prop_cycle'].by_key()['color']
+    # _cc = plt.rcParams['axes.prop_cycle'].by_key()['color'] # Commented out since this appears to only read out values.

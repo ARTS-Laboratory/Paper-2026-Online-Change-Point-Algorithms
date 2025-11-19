@@ -1,13 +1,12 @@
-from pathlib import Path
 
 import numpy as np
 from matplotlib import pyplot as plt
 
-from evals.ground_truth import make_ground_truth
-from fig_funcs.detection_plots import plot_shock
-from offline_detection import binary_segmentation
-from plot_makers.signal_plot_makers import make_signal_plots, make_spectrogram_plots
-from utils.write_data import save_path
+from change_point_algorithms.evals.ground_truth import make_ground_truth
+from change_point_algorithms.fig_funcs.detection_plots import plot_shock
+from change_point_algorithms.offline_detection import binary_segmentation
+from change_point_algorithms.plot_makers.signal_plot_makers import make_signal_plots, make_spectrogram_plots
+from change_point_algorithms.utils.write_data import save_path
 
 
 def plot_signals(time, data, show=False, save_root=None):

@@ -8,7 +8,7 @@ from change_point_algorithms.AnomalyAlgorithm import AnomalyType
 
 
 def get_benchmark_vars():
-    data_size = 400_000
+    data_size = 10_000
     half_data_size = data_size // 2
     time_vec = np.linspace(0, 10, data_size)
     safe_mean, unsafe_mean = 0.0, 50.0
@@ -33,7 +33,7 @@ def profile_isolation_forest_from_python():
     print(f'Current memory usage: {curr / mem_scalar} {mem_unit}, peak of {peak / mem_scalar} {mem_unit}')
     tracemalloc.reset_peak()
     print(tracemalloc.get_traced_memory())
-    anom_results = run_offline_anomaly_models(time_vec, safe, unsafe, data, (AnomalyType.ISO_FOREST,))
+    # run_offline_anomaly_models(time_vec, safe, unsafe, data, (AnomalyType.ISO_FOREST,))
     curr, peak = tracemalloc.get_traced_memory()
     print(f'End of function current memory usage: {curr / mem_scalar:.4} {mem_unit}, peak of {peak / mem_scalar:.4} {mem_unit}')
     tracemalloc.stop()
