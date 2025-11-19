@@ -28,8 +28,8 @@ jobs:
             target: x86_64
 #          - runner: ubuntu-22.04
 #            target: x86
-          - runner: ubuntu-22.04
-            target: aarch64
+#          - runner: ubuntu-22.04
+#            target: aarch64
 #          - runner: ubuntu-22.04
 #            target: armv7
 #          - runner: ubuntu-22.04
@@ -229,6 +229,10 @@ jobs:
         with:
           name: wheels-sdist
           path: dist
+
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
 
   release:
     name: Release
