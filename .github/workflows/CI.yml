@@ -230,10 +230,6 @@ jobs:
           name: wheels-sdist
           path: dist
 
-  publish:
-    name: Publish
-    runs-on: ubuntu-latest
-
   release:
     name: Release
     runs-on: ubuntu-latest
@@ -252,12 +248,12 @@ jobs:
         uses: actions/attest-build-provenance@v2
         with:
           subject-path: 'wheels-*/*'
-      - name: Publish to PyPI
-        if: ${{ startsWith(github.ref, 'refs/tags/') }}
-        uses: PyO3/maturin-action@v1
-        env:
-          MATURIN_PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
-        with:
-          command: upload
-          args: --non-interactive --skip-existing wheels-*/*
+#      - name: Publish to PyPI
+#        if: ${{ startsWith(github.ref, 'refs/tags/') }}
+#        uses: PyO3/maturin-action@v1
+#        env:
+#          MATURIN_PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+#        with:
+#          command: upload
+#          args: --non-interactive --skip-existing wheels-*/*
 
