@@ -28,7 +28,7 @@ class TestRustModels:
             self.unsafe_mean, self.unsafe_stddev, self.unsafe_size, self.pi, epochs=self.epochs, prob_threshold=0.01, early_stopping=False)
         predictions = [item for item in model_gen]
         # print(predictions)
-        assert all([item == False for item in predictions]), f'Model predicted that {[item for item in predictions].count(True)} were change points.'
+        assert all([not item for item in predictions]), f'Model predicted that {[item for item in predictions].count(True)} were change points.'
 
     def test_em_rust_hybrid_all_normal_early_stopping(self):
         rng = np.random.default_rng()
@@ -38,7 +38,7 @@ class TestRustModels:
             self.unsafe_mean, self.unsafe_stddev, self.unsafe_size, self.pi, epochs=self.epochs, prob_threshold=0.01, early_stopping=True)
         predictions = [item for item in model_gen]
         # print(predictions)
-        assert all([item == False for item in predictions]), f'Model predicted that {[item for item in predictions].count(True)} were change points.'
+        assert all([not item for item in predictions]), f'Model predicted that {[item for item in predictions].count(True)} were change points.'
 
     def test_em_rust_hybrid_all_abnormal(self):
         rng = np.random.default_rng()
@@ -49,7 +49,7 @@ class TestRustModels:
             early_stopping=False)
         predictions = [item for item in model_gen]
         # print(predictions)
-        assert all([item == True for item in
+        assert all([item for item in
                     predictions]), f'Model predicted that {[item for item in predictions].count(False)} were change points.'
 
 
@@ -62,7 +62,7 @@ class TestRustModels:
             early_stopping=True)
         predictions = [item for item in model_gen]
         # print(predictions)
-        assert all([item == True for item in
+        assert all([item for item in
                     predictions]), f'Model predicted that {[item for item in predictions].count(False)} were change points.'
 
 
