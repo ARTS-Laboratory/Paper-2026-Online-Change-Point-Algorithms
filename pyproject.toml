@@ -29,7 +29,7 @@ readme = "README.md"
 
 dependencies = [ # need it for saving plots from plotly
     "matplotlib", # plotting library
-    "maturin",
+#    "maturin",
     "numba", # speeding up some python functions
     "numpy",
     "pandas", # plotting library
@@ -43,21 +43,29 @@ dependencies = [ # need it for saving plots from plotly
 ]
 
 [project.optional-dependencies]
-testing = [
-    "pytest",
-    "pytest-benchmark"
-]
-profiling = [
-    "line_profiler",
-    "snakeviz",
-    "jinja2"
-]
+#testing = [
+#    "pytest",
+#    "pytest-benchmark"
+#]
+#profiling = [
+#    "line_profiler",
+#    "snakeviz",
+#    "jinja2"
+#]
 progress = [
     "tqdm" # progress bars
 ]
 
 [dependency-groups]
+build = [
+    "maturin>=1.10.2",
+]
 dev = [
     "pytest>=9.0.1",
     "pytest-benchmark>=5.2.3",
+]
+profile = [
+    "jinja2>=3.1.6",
+    "line-profiler>=5.0.0",
+    "snakeviz>=2.2.2",
 ]
